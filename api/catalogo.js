@@ -78,14 +78,48 @@ export default function handler(req, res) {
       }
     ],
 
-    ingredientes: [
-      {
-        id: "101",
-        nombre: "Lechuga fresca",
-        categoria: "base",
-        stock: true
-      }
-    ],
+   ingredientes: [
+  { id: "101", nombre: "Lechuga fresca", categoria: "base", stock: true },
+  { id: "102", nombre: "Rúcula", categoria: "base", stock: true },
+  { id: "103", nombre: "Mix de rúcula y lechuga", categoria: "base", stock: true },
+
+  { id: "201", nombre: "Pollo", categoria: "proteina", stock: true },
+  { id: "202", nombre: "Atún", categoria: "proteina", stock: true },
+  { id: "203", nombre: "Huevo", categoria: "proteina", stock: true },
+  { id: "204", nombre: "Queso", categoria: "proteina", stock: true },
+  { id: "205", nombre: "Jamón", categoria: "proteina", stock: true },
+  { id: "206", nombre: "Panceta", categoria: "proteina", stock: true },
+
+  { id: "301", nombre: "Garbanzos", categoria: "legumbre", stock: true },
+  { id: "302", nombre: "Porotos", categoria: "legumbre", stock: true },
+  { id: "303", nombre: "Lentejas", categoria: "legumbre", stock: true },
+  { id: "304", nombre: "Arvejas", categoria: "legumbre", stock: true },
+  { id: "305", nombre: "Choclo", categoria: "legumbre", stock: true },
+  { id: "306", nombre: "Brócoli", categoria: "legumbre", stock: true },
+
+  { id: "401", nombre: "Zanahoria", categoria: "vegetal", stock: true },
+  { id: "402", nombre: "Tomates cherry", categoria: "vegetal", stock: true },
+  { id: "403", nombre: "Remolacha", categoria: "vegetal", stock: true },
+  { id: "404", nombre: "Repollo", categoria: "vegetal", stock: true },
+  { id: "405", nombre: "Pepino", categoria: "vegetal", stock: true },
+  { id: "406", nombre: "Espinaca", categoria: "vegetal", stock: true },
+
+  { id: "501", nombre: "Castaña de cajú", categoria: "fruto", stock: true },
+  { id: "502", nombre: "Nueces", categoria: "fruto", stock: true },
+  { id: "503", nombre: "Almendras", categoria: "fruto", stock: true },
+  { id: "504", nombre: "Pasas de uva", categoria: "fruto", stock: true },
+
+  { id: "601", nombre: "Mango", categoria: "especial", stock: true },
+  { id: "602", nombre: "Palta", categoria: "especial", stock: true },
+  { id: "603", nombre: "Queso azul", categoria: "especial", stock: true },
+  { id: "604", nombre: "Lomo feteado", categoria: "especial", stock: true },
+
+  { id: "701", nombre: "Dip de la casa", categoria: "aderezo", stock: true },
+  { id: "702", nombre: "Aceite, limón y sal", categoria: "aderezo", stock: true },
+  { id: "703", nombre: "Salsa César", categoria: "aderezo", stock: true },
+  { id: "704", nombre: "Salsa de garbanzos", categoria: "aderezo", stock: true },
+  { id: "705", nombre: "Tradicionales", categoria: "aderezo", stock: true }
+],
 
     adicionales: [
       {
