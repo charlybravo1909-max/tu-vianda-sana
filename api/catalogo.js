@@ -122,12 +122,20 @@ export default function handler(req, res) {
 ],
 
     adicionales: [
-      {
-        id: "add_prot",
-        nombre: "Proteína adicional",
-        precio: 2000,
-        ayuda: "Especificar cuál"
-      }
-    ]
-  });
+      const CATEGORIAS_ADICIONALES = [
+  "Proteína adicional",
+  "Aderezo adicional",
+  "Ingredientes especiales",
+  "Frutos secos",
+  "Vegetales adicionales",
+  "Legumbres",
+];
+
+function obtenerAdicionalesPorCategoria(catalogo) {
+  return CATEGORIAS_ADICIONALES.map((categoria) => ({
+    categoria,
+    items: catalogo.filter(
+      (item) => item.categoria?.trim() === categoria
+    ),
+  }));
 }
