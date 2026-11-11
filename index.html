@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1b4332">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tu Vianda Sana">
+  <meta name="description" content="Pedí tu vianda saludable: menús del día, ensaladas y wraps.">
+  <title>Tu Vianda Sana</title>
+  <style>
+    :root {
+      --primary: #2d6a4f; --primary-light: #52b788; --primary-dark: #1b4332; --accent: #d8f3dc;
+      --text: #1f2937; --bg: #f3f4f6; --border: #e5e7eb; --danger: #e63946; --mp: #009ee3;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: #cbd5e1; display: flex; justify-content: center; min-height: 100vh; color: var(--text); }
+    .phone-frame { width: 100%; max-width: 480px; background: var(--bg); display: flex; flex-direction: column; position: relative; min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,0.2); }
+    @media (min-width: 520px) {
+      body { padding: 15px 10px; }
+      .phone-frame { border-radius: 34px; border: 8px solid #0f172a; min-height: 860px; max-height: 92vh; overflow: hidden; }
+    }
+    .app-header { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; padding: 16px 18px 12px; position: sticky; top: 0; z-index: 60; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+    .brand-box { display: flex; align-items: center; gap: 10px; }
+    .logo-circle { width: 44px; height: 44px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.2); flex-shrink: 0; }
+    .brand-title { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.3px; }
+    .brand-sub { font-size: 0.72rem; color: var(--accent); font-weight: 500; }
+    .cutoff-banner { margin-top: 10px; background: rgba(0,0,0,0.22); border-radius: 8px; padding: 6px 10px; font-size: 0.78rem; font-weight: 700; text-align: center; color: #fef08a; border: 1px dashed rgba(254,240,138,0.4); }
+
+    .view-content { flex: 1; padding: 14px; overflow-y: auto; padding-bottom: 130px; }
+    .hidden { display: none !important; }
+    .loading { text-align: center; padding: 40px 10px; color: #4b5563; font-weight: 700; font-size: 0.9rem; }
+
+    .nav-grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
+    .cat-box { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 10px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; justify-content: space-between; min-height: 70px; text-align: left; }
+    .cat-box.active { border-color: var(--primary); background: #ecfdf5; box-shadow: 0 4px 10px rgba(45,106,79,0.15); }
+    .cat-num { display: inline-block; width: 20px; height: 20px; border-radius: 50%; background: var(--primary-dark); color: white; font-size: 0.7rem; font-weight: 800; text-align: center; line-height: 20px; margin-bottom: 4px; }
+    .cat-title { font-size: 0.84rem; font-weight: 800; color: var(--text); line-height: 1.15; }
+    .cat-price { font-size: 0.74rem; font-weight: 700; color: var(--primary); margin-top: 3px; }
+
+    .section-head { font-size: 0.95rem; font-weight: 800; color: var(--primary-dark); margin: 12px 0 8px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 4px; }
+    .preset-card { background: white; border: 1.5px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+    .preset-card.out-stock { opacity: 0.55; filter: grayscale(1); }
+    .preset-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .preset-name { font-size: 0.92rem; font-weight: 800; color: var(--primary-dark); }
+    .preset-price { font-size: 0.88rem; font-weight: 800; color: var(--primary); white-space: nowrap; }
+    .preset-desc { font-size: 0.78rem; color: #4b5563; margin: 6px 0 10px; line-height: 1.35; }
+    .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 9px; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+    .btn:disabled { background: #9ca3af; cursor: not-allowed; }
+    .empty { font-size: 0.8rem; color: #6b7280; text-align: center; padding: 14px 0; }
+
+    .limit-banner { background: #fffbeb; border: 2px solid #f59e0b; border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; position: sticky; top: 0; z-index: 30; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+    .limit-banner.full { background: #fef2f2; border-color: var(--danger); }
+    .limit-top { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 0.84rem; }
+    .progress-track { width: 100%; height: 8px; background: #e5e7eb; border-radius: 6px; margin: 6px 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); transition: width 0.25s; }
+    .limit-note { font-size: 0.72rem; color: #78350f; line-height: 1.25; font-weight: 600; }
+
+    .step-box { background: white; border-radius: 14px; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border); }
+    .step-box.extra { border: 2px solid var(--primary); background: #f0fdf4; }
+    .step-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 6px; }
+    .step-title { font-size: 0.86rem; font-weight: 800; color: var(--primary-dark); text-transform: uppercase; }
+    .step-badge { font-size: 0.7rem; font-weight: 700; background: var(--accent); color: var(--primary-dark); padding: 2px 8px; border-radius: 12px; white-space: nowrap; }
+    .base-select { width: 100%; padding: 10px 12px; border-radius: 10px; border: 2px solid var(--primary); font-size: 0.86rem; font-weight: 700; background: #f0fdf4; color: var(--primary-dark); outline: none; }
+
+    .v-list { display: flex; flex-direction: column; gap: 6px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+    .v-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 9px 11px; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.15s; background: #fff; }
+    .v-item.selected { border-color: var(--primary); background: #ecfdf5; }
+    .v-item.out-stock { opacity: 0.45; cursor: not-allowed; background: #f3f4f6; }
+    .v-item.locked { opacity: 0.55; }
+    .v-left { display: flex; align-items: center; gap: 8px; }
+    .check-circle { width: 18px; height: 18px; border: 2px solid #9ca3af; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white; flex-shrink: 0; }
+    .v-item.selected .check-circle { background: var(--primary); border-color: var(--primary); }
+    .v-name { font-size: 0.82rem; font-weight: 700; }
+    .tag-agotado { font-size: 0.65rem; color: white; background: var(--danger); padding: 2px 6px; border-radius: 6px; font-weight: 700; flex-shrink: 0; }
+
+    .addon-card { border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 9px 10px; margin-bottom: 8px; background: #f8fafc; }
+    .addon-top { display: flex; justify-content: space-between; align-items: center; }
+    .addon-title { font-size: 0.82rem; font-weight: 800; }
+    .addon-price { font-size: 0.78rem; font-weight: 800; color: var(--primary); }
+    .qty-controls { display: flex; align-items: center; gap: 8px; }
+    .qty-btn { width: 30px; height: 30px; border-radius: 6px; border: none; background: var(--primary); color: white; font-weight: 800; cursor: pointer; font-size: 1rem; }
+    .qty-val { font-size: 0.88rem; font-weight: 800; min-width: 20px; text-align: center; }
+    .addon-detail { margin-top: 6px; width: 100%; padding: 7px 9px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 6px; background: white; }
+
+    .cart-box { background: white; border: 2px solid var(--primary); border-radius: 14px; padding: 12px; margin-top: 16px; }
+    .cart-item { border-bottom: 1px solid var(--border); padding: 8px 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .cart-item-title { font-size: 0.83rem; font-weight: 800; color: var(--primary-dark); }
+    .cart-item-sub { font-size: 0.73rem; color: #4b5563; line-height: 1.3; }
+    .cart-item-err { font-size: 0.73rem; color: var(--danger); font-weight: 700; }
+    .btn-remove { background: #fee2e2; color: var(--danger); border: none; border-radius: 6px; padding: 5px 9px; font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+    .form-group { margin-top: 10px; }
+    .form-group label { display: block; font-size: 0.76rem; font-weight: 700; margin-bottom: 4px; color: #374151; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px 11px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 16px; }
+
+    .bottom-bar { position: sticky; bottom: 0; background: white; border-top: 1px solid var(--border); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 50; box-shadow: 0 -4px 15px rgba(0,0,0,0.08); }
+    .total-label { font-size: 0.68rem; color: #6b7280; font-weight: 700; text-transform: uppercase; }
+    .total-val { font-size: 1.25rem; font-weight: 900; color: var(--primary-dark); }
+    .btn-checkout { background: var(--primary); color: white; border: none; padding: 12px 18px; border-radius: 12px; font-weight: 800; font-size: 0.88rem; cursor: pointer; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 100; }
+    .modal-box { background: white; border-radius: 18px; padding: 18px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .modal-title { color: var(--primary-dark); font-size: 1.05rem; margin-bottom: 6px; }
+    .modal-text { font-size: 0.82rem; color: #4b5563; margin-bottom: 12px; line-height: 1.4; }
+    .pay-total { font-size: 0.95rem; font-weight: 900; color: var(--primary-dark); margin-bottom: 12px; }
+    .btn-mp { background: var(--mp); padding: 13px; font-size: 0.92rem; font-weight: 800; }
+    .pay-note { font-size: 0.72rem; color: #6b7280; text-align: center; margin-top: 6px; }
+    .divider { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #9ca3af; font-weight: 700; margin: 14px 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .alias-box { background: #f0fdf4; border: 1.5px solid var(--primary); padding: 12px; border-radius: 10px; margin-bottom: 10px; }
+    .alias-row { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; gap: 8px; }
+    .alias-txt { font-size: 1.05rem; font-weight: 900; color: var(--primary-dark); word-break: break-all; }
+    .btn-copy { background: var(--primary); color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .check-row { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 700; margin-bottom: 12px; cursor: pointer; }
+    .check-row input { width: 18px; height: 18px; }
+    .btn-wa { background: #25d366; color: #073b2f; font-weight: 800; }
+    .btn-back { background: #6b7280; margin-top: 10px; }
+    .status-icon { font-size: 2.4rem; text-align: center; margin-bottom: 6px; }
+
+    .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #111827; color: white; padding: 10px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; z-index: 200; opacity: 0; transition: opacity 0.25s; pointer-events: none; max-width: 90%; text-align: center; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <header class="app-header">
+    <div class="brand-box">
+      <div class="logo-circle">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 12 2.1 10.5"/><path d="m12 12 7.5-6.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">Tu Vianda Sana</div>
+        <div class="brand-sub">Menús diarios, ensaladas y wraps</div>
+      </div>
+    </div>
+    <div class="cutoff-banner" id="cutoffDisplay">⏰ Pedido hasta 10:00 am</div>
+  </header>
+
+  <div class="view-content">
+    <div class="loading" id="loading">Cargando el menú de hoy…</div>
+
+    <div id="app" class="hidden">
+      <div class="nav-grid-4">
+        <button class="cat-box active" id="tab-btn-1" onclick="cambiarTab(1)">
+          <div><span class="cat-num">1</span><div class="cat-title">Menús del día</div></div>
+          <div class="cat-price" id="boxPriceMenu"></div>
+        </button>
+        <button class="cat-box" id="tab-btn-2" onclick="cambiarTab(2)">
+          <div><span class="cat-num">2</span><div class="cat-title">Ensaladas de la casa</div></div>
+          <div class="cat-price" id="boxPriceHouse"></div>
+        </button>
+        <button class="cat-box" id="tab-btn-3" onclick="cambiarTab(3)">
+          <div><span class="cat-num">3</span><div class="cat-title">Wraps</div></div>
+          <div class="cat-price" id="boxPriceWrap"></div>
+        </button>
+        <button class="cat-box" id="tab-btn-4" onclick="cambiarTab(4)">
+          <div><span class="cat-num">4</span><div class="cat-title">Armá tu ensalada</div></div>
+          <div class="cat-price" id="boxPriceCustom"></div>
+        </button>
+      </div>
+
+      <div id="tab-1">
+        <div class="section-head"><span>1. Menús del día</span><span id="headerMenuPrice"></span></div>
+        <div id="listaMenus"></div>
+      </div>
+      <div id="tab-2" class="hidden">
+        <div class="section-head"><span>2. Ensaladas creación de la casa</span></div>
+        <div id="listaCasa"></div>
+      </div>
+      <div id="tab-3" class="hidden">
+        <div class="section-head"><span>3. Wraps frescos</span></div>
+        <div id="listaWraps"></div>
+      </div>
+
+      <div id="tab-4" class="hidden">
+        <div class="limit-banner" id="limitBanner">
+          <div class="limit-top"><span>🥗 Ingredientes elegidos (pasos 1 al 7)</span><span id="contadorTexto"></span></div>
+          <div class="progress-track"><div class="progress-fill" id="contadorBarra"></div></div>
+          <div class="limit-note" id="limiteNota"></div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-header"><span class="step-title">Paso 1. Base</span><span class="step-badge">1 incluida</span></div>
+          <select class="base-select" id="baseSelect" onchange="cambiarBase()"></select>
+        </div>
+        <div id="pasos"></div>
+
+        <div class="step-box extra">
+          <div class="step-header"><span class="step-title">Paso 8. Adicionales</span><span class="step-badge" style="background:var(--primary);color:white;">+ Cargo extra</span></div>
+          <p style="font-size:0.74rem;color:#1b4332;margin-bottom:10px;font-weight:600;" id="adicionalesNota"></p>
+          <div id="listaAdicionales"></div>
+        </div>
+
+        <button class="btn" style="padding:13px;font-size:0.9rem;background:var(--primary-dark);" onclick="agregarEnsaladaArmada()">
+          ➕ Agregar ensalada al pedido (<span id="precioArmaVivo"></span>)
+        </button>
+      </div>
+
+      <div class="cart-box">
+        <div class="section-head" style="margin-top:0;"><span>🛒 Tu pedido (<span id="cartCount">0</span>)</span></div>
+        <div id="carrito"></div>
+        <div class="form-group">
+          <label for="cNombre">👤 Nombre y apellido</label>
+          <input type="text" id="cNombre" placeholder="Ej: Juan Pérez" autocomplete="name" maxlength="80">
+        </div>
+        <div class="form-group">
+          <label for="cTelefono">📞 Teléfono</label>
+          <input type="tel" id="cTelefono" placeholder="Ej: 299 512 3456" autocomplete="tel" maxlength="30">
+        </div>
+        <div class="form-group">
+          <label for="cDireccion">📍 Dirección de entrega</label>
+          <input type="text" id="cDireccion" placeholder="Ej: Av. Argentina 450, piso 2 B" autocomplete="street-address" maxlength="150">
+        </div>
+        <div class="form-group">
+          <label for="cNotas">📝 Comentarios / aclaraciones</label>
+          <textarea id="cNotas" rows="2" placeholder="Ej: el timbre no funciona, aderezo aparte…" maxlength="300"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div>
+      <div class="total-label">Total a pagar</div>
+      <div class="total-val" id="totalDisplay">$0</div>
+    </div>
+    <button class="btn-checkout" onclick="abrirPago()">Pagar y finalizar 💳</button>
+  </div>
+
+  <!-- Elegir forma de pago -->
+  <div class="modal-overlay hidden" id="modalPago">
+    <div class="modal-box">
+      <h3 class="modal-title">💳 Pagá tu pedido</h3>
+      <div class="pay-total">Total: <span id="modalTotal"></span></div>
+
+      <button class="btn btn-mp" id="btnMP" onclick="pagarConMP()">Pagar con Mercado Pago</button>
+      <div class="pay-note">Tarjeta de crédito o débito, dinero en cuenta y más.</div>
+
+      <div class="divider">o por transferencia</div>
+
+      <div class="alias-box">
+        <div style="font-size:0.76rem;font-weight:700;color:#374151;">Alias Mercado Pago / banco</div>
+        <div class="alias-row">
+          <span class="alias-txt" id="modalAlias"></span>
+          <button class="btn-copy" onclick="copiarAlias()">Copiar alias</button>
+        </div>
+      </div>
+      <label class="check-row"><input type="checkbox" id="checkTransferi"> Ya hice la transferencia</label>
+      <button class="btn btn-wa" onclick="enviarTransferencia()">Enviar pedido por WhatsApp 📲</button>
+
+      <button class="btn btn-back" onclick="cerrarModal('modalPago')">Volver</button>
+    </div>
+  </div>
+
+  <!-- Resultado del pago -->
+  <div class="modal-overlay hidden" id="modalResultado">
+    <div class="modal-box">
+      <div class="status-icon" id="resIcono"></div>
+      <h3 class="modal-title" id="resTitulo" style="text-align:center;"></h3>
+      <p class="modal-text" id="resTexto" style="text-align:center;"></p>
+      <button class="btn btn-wa hidden" id="resBtnWa">Enviar pedido a la cocina 📲</button>
+      <button class="btn btn-back" onclick="cerrarModal('modalResultado')">Cerrar</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="calc.js"></script>
+<script>
+  const K_CARRITO = 'tvs_carrito_v2';
+  const K_CLIENTE = 'tvs_cliente_v2';
+  const K_PAGO = 'tvs_pago_pendiente_v2';
+  const PASOS = [
+    { cat: 'proteina', titulo: 'Paso 2. Proteínas', grilla: false },
+    { cat: 'legumbre', titulo: 'Paso 3. Legumbres', grilla: true },
+    { cat: 'vegetal', titulo: 'Paso 4. Vegetales y fibra', grilla: true },
+    { cat: 'fruto', titulo: 'Paso 5. Frutos secos', grilla: true },
+    { cat: 'especial', titulo: 'Paso 6. Especiales', grilla: false },
+    { cat: 'aderezo', titulo: 'Paso 7. Aderezos', grilla: false }
+  ];
+
+  let CAT = Calc.DEFAULTS;
+  let carrito = [];
+  let sel = new Set();
+  let adic = {};   // id -> { cantidad, detalle }
+
+  const $ = id => document.getElementById(id);
+  const pesos = Calc.pesos;
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  function guardar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function leer(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+  function borrar(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2400); }
+
+  // ---------- inicio ----------
+  async function cargarCatalogo() {
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 8000);
+      const r = await fetch('/api/catalogo', { cache: 'no-store', signal: ctrl.signal });
+      clearTimeout(t);
+      if (r.ok) CAT = await r.json();
+    } catch (e) { /* sin servidor: queda el catálogo por defecto */ }
+  }
+
+  function seleccionInicial() {
+    sel = new Set();
+    const base = CAT.ingredientes.find(i => i.categoria === 'base' && i.stock);
+    if (base) sel.add(base.id);
+    const ader = CAT.ingredientes.find(i => i.categoria === 'aderezo' && i.stock);
+    if (ader) sel.add(ader.id);
+    adic = {};
+  }
+
+  async function iniciar() {
+    await cargarCatalogo();
+    carrito = leer(K_CARRITO) || [];
+    const cli = leer(K_CLIENTE) || {};
+    $('cNombre').value = cli.nombre || '';
+    $('cTelefono').value = cli.telefono || '';
+    $('cDireccion').value = cli.direccion || '';
+    $('cNotas').value = cli.notas || '';
+    ['cNombre', 'cTelefono', 'cDireccion', 'cNotas'].forEach(id => $(id).addEventListener('input', () => guardar(K_CLIENTE, datosCliente())));
+    seleccionInicial();
+    renderMenu();
+    renderArmado();
+    renderCarrito();
+    $('loading').classList.add('hidden');
+    $('app').classList.remove('hidden');
+    revisarRegresoMP();
+  }
+
+  function cambiarTab(n) {
+    [1, 2, 3, 4].forEach(i => {
+      $('tab-' + i).classList.toggle('hidden', i !== n);
+      $('tab-btn-' + i).classList.toggle('active', i === n);
+    });
+  }
+
+  // ---------- menú ----------
+  function tarjeta(nombre, precio, desc, stock, onclick) {
+    return `<div class="preset-card ${stock ? '' : 'out-stock'}">
+      <div class="preset-top"><div class="preset-name">${esc(nombre)}</div><div class="preset-price">${pesos(precio)}</div></div>
+      <div class="preset-desc">${esc(desc)}</div>
+      <button class="btn" ${stock ? '' : 'disabled'} onclick="${onclick}">${stock ? '➕ Agregar al pedido' : 'Sin stock'}</button>
+    </div>`;
+  }
+
+  function renderMenu() {
+    const c = CAT.config;
+    $('cutoffDisplay').textContent = c.horarioTexto;
+    $('boxPriceMenu').textContent = pesos(c.precioMenu);
+    $('headerMenuPrice').textContent = pesos(c.precioMenu);
+    $('boxPriceHouse').textContent = CAT.casa.length + ' opciones';
+    $('boxPriceWrap').textContent = CAT.wraps.length ? 'Desde ' + pesos(Math.min(...CAT.wraps.map(w => w.precio))) : '—';
+    $('boxPriceCustom').textContent = 'Hasta ' + c.maxIngredientes + ' ing.';
+
+    $('listaMenus').innerHTML = CAT.menus.map(m => tarjeta(`${m.codigo}: ${m.nombre}`, c.precioMenu, m.descripcion, m.stock, `agregar('menu','${esc(m.id)}')`)).join('') || '<p class="empty">Hoy no hay menús cargados.</p>';
+    $('listaCasa').innerHTML = CAT.casa.map(h => tarjeta(`${h.codigo} ${h.nombre}`, h.precio, h.descripcion, h.stock, `agregar('casa','${esc(h.id)}')`)).join('') || '<p class="empty">Sin ensaladas por ahora.</p>';
+    $('listaWraps').innerHTML = CAT.wraps.map(w => tarjeta(w.nombre, w.precio, w.descripcion, w.stock, `agregar('wrap','${esc(w.id)}')`)).join('') || '<p class="empty">Sin wraps por ahora.</p>';
+  }
+
+  function agregar(tipo, id) {
+    carrito.push({ tipo, id });
+    guardar(K_CARRITO, carrito);
+    renderCarrito();
+    toast('Agregado al pedido ✅');
+  }
+
+  // ---------- armá tu ensalada ----------
+  const ingsDe = cat => CAT.ingredientes.filter(i => i.categoria === cat);
+  const elegidos = () => CAT.ingredientes.filter(i => sel.has(i.id));
+
+  function renderArmado() {
+    const c = CAT.config;
+    const total = elegidos().length;
+
+    const bases = ingsDe('base');
+    if (!bases.some(b => sel.has(b.id) && b.stock)) {
+      bases.forEach(b => sel.delete(b.id));
+      const disp = bases.find(b => b.stock);
+      if (disp) sel.add(disp.id);
+    }
+    $('baseSelect').innerHTML = bases.map(b => `<option value="${esc(b.id)}" ${b.stock ? '' : 'disabled'} ${sel.has(b.id) ? 'selected' : ''}>${esc(b.nombre)}${b.stock ? '' : ' (agotado)'}</option>`).join('');
+
+    $('pasos').innerHTML = PASOS.map(p => {
+      const lim = c.limites[p.cat];
+      const enCat = ingsDe(p.cat).filter(i => sel.has(i.id)).length;
+      const items = ingsDe(p.cat).map(i => {
+        const on = sel.has(i.id);
+        const bloq = !on && (total >= c.maxIngredientes || enCat >= lim);
+        return `<div class="v-item ${on ? 'selected' : ''} ${i.stock ? '' : 'out-stock'} ${bloq ? 'locked' : ''}" ${i.stock ? `onclick="alternar('${esc(i.id)}')"` : ''}>
+          <div class="v-left"><div class="check-circle">${on ? '✓' : ''}</div><span class="v-name">${esc(i.nombre)}</span></div>
+          ${i.stock ? '' : '<span class="tag-agotado">Agotado</span>'}
+        </div>`;
+      }).join('');
+      return `<div class="step-box">
+        <div class="step-header"><span class="step-title">${p.titulo}</span><span class="step-badge">${enCat} / ${lim} máx.</span></div>
+        <div class="${p.grilla ? 'grid-2' : 'v-list'}">${items}</div>
+      </div>`;
+    }).join('');
+
+    $('contadorTexto').textContent = `${total} / ${c.maxIngredientes} máx.`;
+    $('contadorBarra').style.width = Math.min(100, Math.round(total / c.maxIngredientes * 100)) + '%';
+    $('limitBanner').classList.toggle('full', total >= c.maxIngredientes);
+    $('limiteNota').innerHTML = `⚠️ Tu ensalada incluye hasta <strong>${c.maxIngredientes} ingredientes</strong> entre los pasos 1 al 7. Lo que quieras sumar por encima tiene <strong>cargo extra</strong> en el <strong>paso 8</strong>.`;
+    $('adicionalesNota').textContent = `Todo lo que supere los ${c.maxIngredientes} ingredientes incluidos se suma acá, con cargo extra según el tipo:`;
+
+    $('listaAdicionales').innerHTML = CAT.adicionales.map(a => {
+      const st = adic[a.id] || { cantidad: 0, detalle: '' };
+      return `<div class="addon-card">
+        <div class="addon-top">
+          <div><div class="addon-title">${esc(a.nombre)}</div><div class="addon-price">+${pesos(a.precio)} c/u</div></div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="cantidadAdicional('${esc(a.id)}',-1)" aria-label="Quitar">−</button>
+            <span class="qty-val">${st.cantidad}</span>
+            <button class="qty-btn" onclick="cantidadAdicional('${esc(a.id)}',1)" aria-label="Agregar">+</button>
+          </div>
+        </div>
+        ${st.cantidad > 0 ? `<input type="text" class="addon-detail" maxlength="60" placeholder="${esc(a.ayuda)}" value="${esc(st.detalle)}" oninput="detalleAdicional('${esc(a.id)}', this.value)">` : ''}
+      </div>`;
+    }).join('');
+
+    $('precioArmaVivo').textContent = pesos(precioArmaActual());
+  }
+
+  function precioArmaActual() {
+    return CAT.config.precioArma + CAT.adicionales.reduce((s, a) => s + ((adic[a.id] || {}).cantidad || 0) * a.precio, 0);
+  }
+
+  function cambiarBase() {
+    ingsDe('base').forEach(b => sel.delete(b.id));
+    sel.add($('baseSelect').value);
+    renderArmado();
+  }
+
+  function alternar(id) {
+    const it = CAT.ingredientes.find(i => i.id === id);
+    if (!it || !it.stock) return;
+    if (sel.has(id)) { sel.delete(id); renderArmado(); return; }
+    const c = CAT.config;
+    if (elegidos().length >= c.maxIngredientes) {
+      alert(`⚠️ Ya elegiste los ${c.maxIngredientes} ingredientes incluidos.\n\nSi querés sumar más, agregalos en el PASO 8 (adicionales, con cargo extra).`);
+      return;
+    }
+    if (ingsDe(it.categoria).filter(i => sel.has(i.id)).length >= c.limites[it.categoria]) {
+      alert(`⚠️ En esta categoría podés elegir hasta ${c.limites[it.categoria]} incluido(s). Para sumar más, usá el PASO 8 (adicionales).`);
+      return;
+    }
+    sel.add(id);
+    renderArmado();
+  }
+
+  function cantidadAdicional(id, d) {
+    const st = adic[id] || { cantidad: 0, detalle: '' };
+    st.cantidad = Math.max(0, Math.min(20, st.cantidad + d));
+    if (!st.cantidad) st.detalle = '';
+    adic[id] = st;
+    renderArmado();
+  }
+  function detalleAdicional(id, v) { (adic[id] = adic[id] || { cantidad: 0, detalle: '' }).detalle = v; }
+
+  function agregarEnsaladaArmada() {
+    const item = {
+      tipo: 'arma',
+      ingredientes: elegidos().map(i => i.id),
+      adicionales: Object.entries(adic).filter(([, v]) => v.cantidad > 0).map(([id, v]) => ({ id, cantidad: v.cantidad, detalle: v.detalle.trim() }))
+    };
+    try { Calc.calcularItem(CAT, item); }
+    catch (e) { alert(e.message); return; }
+    carrito.push(item);
+    guardar(K_CARRITO, carrito);
+    seleccionInicial();
+    renderArmado();
+    renderCarrito();
+    toast('🥗 Ensalada agregada al pedido');
+  }
+
+  // ---------- carrito ----------
+  function renderCarrito() {
+    $('cartCount').textContent = carrito.length;
+    if (!carrito.length) {
+      $('carrito').innerHTML = '<p class="empty">Todavía no agregaste platos a tu pedido.</p>';
+      $('totalDisplay').textContent = '$0';
+      return;
+    }
+    let total = 0;
+    $('carrito').innerHTML = carrito.map((it, i) => {
+      let l, err = '';
+      try { l = Calc.calcularItem(CAT, it); total += l.precio; }
+      catch (e) { l = { titulo: 'Ítem no disponible', detalle: '', precio: 0 }; err = e.message; }
+      return `<div class="cart-item">
+        <div>
+          <div class="cart-item-title">${esc(l.titulo)}${err ? '' : ' — ' + pesos(l.precio)}</div>
+          ${err ? `<div class="cart-item-err">${esc(err)}</div>` : `<div class="cart-item-sub">${esc(l.detalle)}</div>`}
+        </div>
+        <button class="btn-remove" onclick="quitar(${i})">Quitar</button>
+      </div>`;
+    }).join('');
+    $('totalDisplay').textContent = pesos(total);
+  }
+
+  function quitar(i) {
+    carrito.splice(i, 1);
+    guardar(K_CARRITO, carrito);
+    renderCarrito();
+  }
+
+  function datosCliente() {
+    return Calc.limpiarCliente({ nombre: $('cNombre').value, telefono: $('cTelefono').value, direccion: $('cDireccion').value, notas: $('cNotas').value });
+  }
+
+  // ---------- pago ----------
+  let pedidoActual = null; // { calc, cliente }
+
+  function abrirPago() {
+    if (!carrito.length) { alert('Tu pedido está vacío. Agregá al menos un menú, wrap o ensalada.'); return; }
+    const cliente = datosCliente();
+    if (!cliente.nombre) { alert('Completá tu nombre y apellido.'); $('cNombre').focus(); return; }
+    if (!cliente.direccion) { alert('Completá la dirección de entrega.'); $('cDireccion').focus(); return; }
+    let calc;
+    try { calc = Calc.calcular(CAT, carrito); }
+    catch (e) { alert(e.message); return; }
+    pedidoActual = { calc, cliente };
+    $('modalTotal').textContent = pesos(calc.total);
+    $('modalAlias').textContent = CAT.config.alias;
+    $('checkTransferi').checked = false;
+    $('modalPago').classList.remove('hidden');
+  }
+
+  function cerrarModal(id) { $(id).classList.add('hidden'); }
+
+  async function pagarConMP() {
+    const btn = $('btnMP');
+    btn.disabled = true;
+    btn.textContent = 'Conectando con Mercado Pago…';
+    try {
+      const r = await fetch('/api/crear-pago', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: carrito, cliente: pedidoActual.cliente })
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok || !data.init_point) {
+        alert(data.error || 'No se pudo iniciar el pago. Probá de nuevo o pagá por transferencia.');
+        if (data.recargar) { await cargarCatalogo(); renderMenu(); renderArmado(); renderCarrito(); cerrarModal('modalPago'); }
+        return;
+      }
+      guardar(K_PAGO, { pedidoId: data.pedidoId, resumen: data.resumen, total: data.total, ts: Date.now() });
+      window.location.href = data.init_point;
+    } catch (e) {
+      alert('No hay conexión con el servidor de pagos. Probá de nuevo o pagá por transferencia.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Pagar con Mercado Pago';
+    }
+  }
+
+  function copiarAlias() {
+    const a = CAT.config.alias;
+    if (navigator.clipboard) navigator.clipboard.writeText(a).then(() => toast('Alias copiado ✅'), () => alert('Alias: ' + a));
+    else alert('Alias: ' + a);
+  }
+
+  function abrirWhatsApp(msg) {
+    const tel = String(CAT.config.whatsapp || '').replace(/\D/g, '');
+    window.location.href = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
+  }
+
+  function vaciarPedido() {
+    carrito = [];
+    guardar(K_CARRITO, carrito);
+    renderCarrito();
+  }
+
+  function enviarTransferencia() {
+    if (!$('checkTransferi').checked) { alert('Marcá "Ya hice la transferencia" para enviar el pedido.'); return; }
+    const { calc, cliente } = pedidoActual;
+    const msg = `🥗 *NUEVO PEDIDO — TU VIANDA SANA*\n💸 *Pago:* transferencia al alias ${CAT.config.alias} (a verificar)\n\n` + Calc.resumen(calc, cliente);
+    cerrarModal('modalPago');
+    vaciarPedido();
+    abrirWhatsApp(msg);
+  }
+
+  function mostrarResultado(icono, titulo, texto, mensajeWa) {
+    $('resIcono').textContent = icono;
+    $('resTitulo').textContent = titulo;
+    $('resTexto').textContent = texto;
+    const b = $('resBtnWa');
+    b.classList.toggle('hidden', !mensajeWa);
+    b.onclick = mensajeWa ? () => abrirWhatsApp(mensajeWa) : null;
+    $('modalResultado').classList.remove('hidden');
+  }
+
+  // Al volver de Mercado Pago la URL trae payment_id / status.
+  async function revisarRegresoMP() {
+    const p = new URLSearchParams(location.search);
+    if (!p.has('payment_id') && !p.has('collection_id') && !p.has('preference_id')) return;
+    const pagoId = p.get('payment_id') || p.get('collection_id');
+    history.replaceState(null, '', location.pathname);
+    const pendiente = leer(K_PAGO) || {};
+
+    if (!pagoId || pagoId === 'null') {
+      mostrarResultado('↩️', 'No se completó el pago', 'Tu pedido sigue guardado. Podés intentar de nuevo o pagar por transferencia.');
+      return;
+    }
+
+    mostrarResultado('⏳', 'Verificando tu pago…', 'Un momento, estamos confirmando con Mercado Pago.');
+    let v;
+    try {
+      const r = await fetch('/api/verificar-pago?id=' + encodeURIComponent(pagoId), { cache: 'no-store' });
+      v = await r.json();
+      if (!r.ok) throw new Error(v.error);
+    } catch (e) {
+      mostrarResultado('⚠️', 'No pudimos verificar el pago', `Si Mercado Pago te lo cobró, escribinos por WhatsApp con el número de pago ${pagoId}.`,
+        `Hola, hice un pedido y pagué con Mercado Pago. Número de pago: ${pagoId}`);
+      return;
+    }
+
+    const resumen = v.resumen || pendiente.resumen || '';
+    const ref = v.pedidoId || pendiente.pedidoId || '';
+    if (v.estado === 'approved' && v.montoOk) {
+      borrar(K_PAGO);
+      vaciarPedido();
+      mostrarResultado('✅', '¡Pago aprobado!', 'Último paso: enviá el pedido a la cocina por WhatsApp para que lo preparemos.',
+        `🥗 *NUEVO PEDIDO PAGADO — TU VIANDA SANA*\n✅ *Pago Mercado Pago N° ${pagoId}* (aprobado)\n🧾 *Pedido:* ${ref}\n\n${resumen}`);
+    } else if (v.estado === 'pending' || v.estado === 'in_process' || v.estado === 'authorized') {
+      vaciarPedido();
+      mostrarResultado('⏳', 'Pago pendiente', 'Mercado Pago todavía no acreditó el pago (por ejemplo, si elegiste pagar en efectivo). Enviá el pedido igual y lo preparamos cuando se acredite.',
+        `🥗 *NUEVO PEDIDO — TU VIANDA SANA*\n⏳ *Pago Mercado Pago N° ${pagoId}* (PENDIENTE de acreditación)\n🧾 *Pedido:* ${ref}\n\n${resumen}`);
+    } else if (v.estado === 'approved') {
+      mostrarResultado('⚠️', 'Revisemos tu pago', `El pago ${pagoId} se aprobó, pero el monto no coincide con el pedido. Escribinos por WhatsApp y lo resolvemos.`,
+        `Hola, mi pago de Mercado Pago N° ${pagoId} no coincide con el pedido ${ref}.`);
+    } else {
+      mostrarResultado('❌', 'El pago no se aprobó', 'Mercado Pago rechazó el pago. Tu pedido sigue guardado: probá con otro medio o pagá por transferencia.');
+    }
+  }
+
+  iniciar();
+</script>
+</body>
+</html>
