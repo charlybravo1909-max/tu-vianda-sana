@@ -122,20 +122,42 @@ export default function handler(req, res) {
 ],
 
     adicionales: [
-      const CATEGORIAS_ADICIONALES = [
-  "Proteína adicional",
-  "Aderezo adicional",
-  "Ingredientes especiales",
-  "Frutos secos",
-  "Vegetales adicionales",
-  "Legumbres",
-];
-
-function obtenerAdicionalesPorCategoria(catalogo) {
-  return CATEGORIAS_ADICIONALES.map((categoria) => ({
-    categoria,
-    items: catalogo.filter(
-      (item) => item.categoria?.trim() === categoria
-    ),
-  }));
-}
+  {
+    id: "add_prot",
+    nombre: "Proteína adicional",
+    precio: 2000,
+    ayuda: "Especificar cuál (ej: Pollo, Atún, Jamón...)"
+  },
+  {
+    id: "add_ader",
+    nombre: "Aderezo adicional",
+    precio: 2000,
+    ayuda: "Especificar cuál (ej: Salsa César, Dip...)"
+  },
+  {
+    id: "add_esp",
+    nombre: "Ingredientes especiales",
+    precio: 2000,
+    ayuda: "Especificar cuál (ej: Palta, Mango, Lomo...)"
+  },
+  {
+    id: "add_frut",
+    nombre: "Frutos secos",
+    precio: 1700,
+    ayuda: "Especificar cuál (ej: Castañas, Nueces...)"
+  },
+  {
+    id: "add_veg",
+    nombre: "Vegetales adicionales",
+    precio: 1000,
+    ayuda: "Especificar cuál (ej: Tomates cherry...)"
+  },
+  {
+    id: "add_leg",
+    nombre: "Legumbres",
+    precio: 1000,
+    ayuda: "Especificar cuál (ej: Garbanzos, Choclo...)"
+  }
+]
+      
+ 
