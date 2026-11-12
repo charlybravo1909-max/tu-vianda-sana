@@ -22,7 +22,7 @@ export default function handler(req, res) {
       {
         id: "m1",
         codigo: "1.1 Opción 1",
-        nombre: "Pollo con Arroz",
+        nombre: "Pollo con Arroz TEST",
         descripcion: "Porción fresca del día preparada con ingredientes naturales.",
         stock: true
       },
