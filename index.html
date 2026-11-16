@@ -474,6 +474,7 @@
       cart: [],
       armaSelection: [],
       armaAdicionales: {},
+      armaAderezo: 'Dip de la casa (incluido)',
       selectedHouseAderezo: 'Dip de la casa',
       paymentMethod: 'transferencia',
       paymentWallet: 'Banco',
@@ -831,12 +832,20 @@
         { key: 'legumbre', label: '3. Legumbres y granos', limit: cfg.limite_legumbre },
         { key: 'vegetal', label: '4. Vegetales frescos', limit: cfg.limite_vegetal },
         { key: 'fruto', label: '5. Frutos secos y semillas', limit: cfg.limite_fruto },
-        { key: 'especial', label: '6. Especiales', limit: cfg.limite_especial },
-        { key: 'aderezo', label: '7. Aderezo incluido', limit: cfg.limite_aderezo }
+        { key: 'especial', label: '6. Especiales', limit: cfg.limite_especial }
       ];
 
+      const aderezoOptions = [
+        'Dip de la casa (incluido)',
+        'Mayonesa, ketchup y mostaza',
+        'Aceite, limón y sal'
+      ];
+      if (!aderezoOptions.includes(state.armaAderezo)) {
+        state.armaAderezo = aderezoOptions[0];
+      }
+
       const container = document.getElementById('ingredientes-container');
-      container.innerHTML = categories.map(cat => {
+      const stepsHtml = categories.map(cat => {
         const items = state.catalog.ingredientes.filter(i => i.categoria === cat.key && isAvailable(i.stock));
         if (items.length === 0) return '';
         const selectedInCat = state.armaSelection.filter(id => {
@@ -870,6 +879,37 @@
           </div>
         `;
       }).join('');
+
+      const aderezoHtml = `
+        <div class="rounded-2xl bg-emerald-50/70 border-2 border-emerald-200 p-3.5 space-y-2.5">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <div>
+              <h3 class="text-sm font-extrabold text-emerald-950">7. Aderezo incluido (no descuenta de tus 6 ingredientes)</h3>
+              <p class="text-xs text-emerald-800 mt-0.5">
+                ✨ Todas las ensaladas vienen con el <strong>Dip de la casa incluido</strong>. Si preferís, acá podés cambiarlo por <strong>(Mayonesa, ketchup y mostaza)</strong> ó por <strong>(Aceite, limón y sal)</strong>:
+              </p>
+            </div>
+            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 shrink-0">Sin cargo</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            ${aderezoOptions.map(opt => {
+              const active = state.armaAderezo === opt;
+              return `
+                <button type="button" data-arma-aderezo="${opt}"
+                  class="px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer ${
+                    active
+                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                      : 'bg-white text-emerald-950 border-emerald-200 hover:border-emerald-400'
+                  }">
+                  ${active ? '✓ ' : ''}${opt}
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = stepsHtml + aderezoHtml;
 
       const addGrid = document.getElementById('adicionales-grid');
       addGrid.innerHTML = state.catalog.adicionales.map(ad => {
@@ -1119,6 +1159,13 @@
         return;
       }
 
+      const armaAderBtn = e.target.closest('[data-arma-aderezo]');
+      if (armaAderBtn) {
+        state.armaAderezo = armaAderBtn.dataset.armaAderezo;
+        renderArmaTuEnsalada();
+        return;
+      }
+
       const ingBtn = e.target.closest('[data-toggle-ing]');
       if (ingBtn) {
         const id = ingBtn.dataset.toggleIng;
@@ -1194,6 +1241,7 @@
     document.getElementById('reset-arma-btn').addEventListener('click', () => {
       state.armaSelection = [];
       state.armaAdicionales = {};
+      state.armaAderezo = 'Dip de la casa (incluido)';
       document.getElementById('arma-notas').value = '';
       renderArmaTuEnsalada();
     });
@@ -1223,7 +1271,7 @@
       });
 
       const notas = document.getElementById('arma-notas').value.trim();
-      const parts = [ingNames.join(', ')];
+      const parts = [ingNames.join(', '), `Aderezo: ${state.armaAderezo}`];
       if (extraDetails.length) parts.push(`Extras: ${extraDetails.join(', ')}`);
       if (notas) parts.push(`Nota: ${notas}`);
 
@@ -1238,6 +1286,7 @@
 
       state.armaSelection = [];
       state.armaAdicionales = {};
+      state.armaAderezo = 'Dip de la casa (incluido)';
       document.getElementById('arma-notas').value = '';
       renderArmaTuEnsalada();
     });
