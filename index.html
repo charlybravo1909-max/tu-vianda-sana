@@ -87,7 +87,7 @@
 
       <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
         <span id="horario-badge" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-emerald-900/50 border border-dashed border-emerald-300/70 text-emerald-50 px-3 py-1 rounded-full">
-          ⏰ Pedido hasta 10:00 am
+          ⏰ Pedido hasta 10:15 am
         </span>
         <button type="button" id="refresh-sync-btn" class="text-[11px] text-emerald-100 hover:text-white font-medium flex items-center gap-1 underline-offset-2 hover:underline"><span id="sync-status">Catálogo listo</span><span>↻</span></button>
       </div>
@@ -132,7 +132,7 @@
               <span class="palette-badge text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">4</span>
             </div>
             <div class="text-[13px] font-bold leading-snug">Licuados y Postres</div>
-            <div class="palette-sub text-[11px] text-gray-500 mt-0.5">Licuados $8.000 · Postres $7.000</div>
+            <div class="palette-sub text-[11px] text-gray-500 mt-0.5">Licuados $8.000 ($6.000 con plato) · Postres $7.000</div>
           </button>
         </div>
       </section>
@@ -268,7 +268,7 @@
     // Datos iniciales respaldados por Tu_Vianda_Sana_Catalogo
     const catalog = {
       config: {
-        horario_texto: '⏰ Pedido hasta 10:00 am',
+        horario_texto: '⏰ Pedido hasta 10:15 am',
         whatsapp: '5492995981735',
         alias: 'tuvianda.sana',
         precio_menu: 15000,
@@ -285,21 +285,30 @@
         }
       },
       menus: [
-        { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Pollo con Arroz testi', descripcion: 'Porción fresca del día preparada con ingredientes naturales.', stock: 'NO' },
-        { id: 'm2', codigo: '1.2 Opción 2', nombre: 'Guiso de Lentejas', descripcion: 'Guiso casero nutritivo de lentejas seleccionadas.', stock: 'SI' }
+        { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Sorrentinos', descripcion: 'Sorrentinos de jamón y queso con carne picada en salsa boloñesa, incluye pan y queso rallado.', stock: 'SI' },
+        { id: 'm2', codigo: '1.2 Opción 2', nombre: 'Guiso de Lentejas', descripcion: 'Guiso casero nutritivo de lentejas seleccionadas.', stock: 'NO' }
       ],
       ensaladas: [
-        { id: 'h1', codigo: '2.1', nombre: 'Power Bowl Integral', precio: 13500, descripcion: 'Tallarines integrales con arvejas, queso, palta, zanahoria, pollo y aderezo de la casa.', stock: 'SI' },
-        { id: 'h2', codigo: '2.2', nombre: 'Premium Tropical', precio: 14500, descripcion: 'Lechuga, fetas de lomo, queso azul, mango, palta, tomates cherry, crutones y aderezo de la casa.', stock: 'SI' },
-        { id: 'h3', codigo: '2.3', nombre: 'Proteica', precio: 13500, descripcion: 'Lechuga, zanahoria, palta, cherry, huevo duro, pechuga de pollo, crutones y aderezo de la casa.', stock: 'SI' },
-        { id: 'h4', codigo: '2.4', nombre: 'César', precio: 13000, descripcion: 'Lechuga, crutones, pollo, panceta, queso y salsa césar.', stock: 'SI' },
-        { id: 'h5', codigo: '2.5', nombre: 'Clásica', precio: 12500, descripcion: 'Lechuga, zanahoria, cherry, choclo, queso y pollo.', stock: 'SI' },
-        { id: 'h6', codigo: '2.6', nombre: 'Mediterránea', precio: 13500, descripcion: 'Fideos de vegetales, zanahoria, cherry, atún, huevo y lechuga.', stock: 'SI' }
+        { id: 'h1', codigo: '2.1', nombre: '🥘 Power Bowl Integral', precio: 15000, descripcion: 'Tallarines integrales con arvejas, calabaza, huevo, zanahoria, pollo y aderezo de la casa.', stock: 'SI' },
+        { id: 'h2', codigo: '2.2', nombre: '🌴 Premium Tropical', precio: 15000, descripcion: 'Lechuga, fetas de lomo, queso azul, mango, palta, tomates cherry, crutones y aderezo de la casa.', stock: 'SI' },
+        { id: 'h3', codigo: '2.3', nombre: '🥚 Proteica', precio: 15000, descripcion: 'Lechuga, zanahoria, palta, quinoa, huevo duro, pechuga de pollo, crutones y aderezo de la casa.', stock: 'SI' },
+        { id: 'h4', codigo: '2.4', nombre: '🥓 César', precio: 15000, descripcion: 'Lechuga, crutones, pollo, panceta, queso y salsa césar.', stock: 'SI' },
+        { id: 'h5', codigo: '2.5', nombre: '🌽 Clásica', precio: 15000, descripcion: 'Lechuga, zanahoria, cherry, choclo, queso y pollo.', stock: 'SI' },
+        { id: 'h6', codigo: '2.6', nombre: '🐟 Mediterránea', precio: 15000, descripcion: 'Fideos de vegetales, zanahoria, cherry, atún, huevo y lechuga.', stock: 'SI' },
+        { id: 'h7', codigo: '2.7', nombre: '🥭 Ensalada Tropical Crunch', precio: 15000, descripcion: 'Lechuga, queso, fetas de lomo, nueces, mango y palta. Acompañada de dip de la casa y croutones artesanales.', stock: 'NO' },
+        { id: 'h8', codigo: '2.8', nombre: '👑 Premium Tropical', precio: 15000, descripcion: 'Lechuga, cherry, choclo, pollo desmechado, queso y palta. Acompañado de crutones artesanales y el dip de la casa.', stock: 'NO' },
+        { id: 'h9', codigo: '2.9', nombre: '🥑 Ensalada Brisa Gourmet', precio: 15000, descripcion: 'Mix de rúcula y lechuga, queso azul, fetas de lomo, nueces, palta y mango. Acompañada con nuestro aderezo de la casa y croutones artesanales.', stock: 'NO' },
+        { id: 'h10', codigo: '2.10', nombre: '🥗 Ensalada Protein Crunch', precio: 15000, descripcion: 'Mix de rúcula y lechuga, tallarines integrales con lentejas, cubos de pollo crunchy, huevo, palta y tomates cherrys. Acompañada con nuestro aderezo de la casa y croutones artesanales.', stock: 'NO' },
+        { id: 'h11', codigo: '2.11', nombre: '💪🏼 Fit y Fresh', precio: 15000, descripcion: 'Mix de verdes, quinoa, pollo, huevo duro, choclo y cherry. Acompañado del aderezo de la casa y fruta como postre.', stock: 'NO' },
+        { id: 'h12', codigo: '2.12', nombre: '🥑 Crunchy Deli', precio: 15000, descripcion: 'Lechuga, arroz yamaní, pollo crunchy en cubos, palta, queso y zanahoria. Acompañado de nuestros crutones artesanales y el dip de la casa, incluye fruta como postre.', stock: 'NO' },
+        { id: 'h13', codigo: '2.13', nombre: '🥒 La Refrescante', precio: 15000, descripcion: 'Lechuga, pepino, cebolla morada, cherry, pollo y queso. Acompañado de nuestros crutones artesanales y el dip de la casa, incluye fruta como postre.', stock: 'NO' },
+        { id: 'h14', codigo: '2.14', nombre: '🫜 Ensalada de la Casa (Vital)', precio: 15000, descripcion: 'Lechuga, zanahoria, remolacha, choclo, huevo duro, pollo desmechado. Acompañada de crutones artesanales, el dip de la casa y fruta como postre.', stock: 'NO' },
+        { id: 'h15', codigo: '2.15', nombre: '👑 La Consentida (De Autoría)', precio: 15000, descripcion: 'Lechuga, zanahoria, queso rallado, queso azul, pollo y crutones. Acompañado de un dip especial 😍.', stock: 'NO' }
       ],
       wraps: [
         { id: 'w1', nombre: 'Wrap de Pollo & Vegetales', precio: 15000, descripcion: 'Tortilla tibia con pollo grillado, hojas verdes, zanahoria, queso y aderezo de la casa.', stock: 'NO' },
         { id: 'w2', nombre: 'Wrap Cesar', precio: 15000, descripcion: 'Tortilla tibia con pollo grillado, lechuga, queso, cubos de panceta ahumada, salsa cesar (casera) y crutones.', stock: 'NO' },
-        { id: 'o1', nombre: 'Omelette Especial', precio: 15000, descripcion: 'Omelette especial con fetas de lomo, espinaca y cherry.', stock: 'NO' }
+        { id: 'o1', nombre: 'Omelette Capresse', precio: 15000, descripcion: 'Omelette con tomates frescos, queso y orégano, acompañado de tallarines con choclo.', stock: 'SI' }
       ],
       ingredientes: [
         { id: '101', nombre: 'Lechuga fresca', categoria: 'base', stock: 'SI' },
@@ -317,6 +326,7 @@
         { id: '304', nombre: 'Arvejas', categoria: 'legumbre', stock: 'SI' },
         { id: '305', nombre: 'Choclo', categoria: 'legumbre', stock: 'SI' },
         { id: '306', nombre: 'Brócoli', categoria: 'legumbre', stock: 'SI' },
+        { id: '307', nombre: 'Calabaza', categoria: 'legumbre', stock: 'SI' },
         { id: '401', nombre: 'Zanahoria', categoria: 'vegetal', stock: 'SI' },
         { id: '402', nombre: 'Tomates cherry', categoria: 'vegetal', stock: 'SI' },
         { id: '403', nombre: 'Remolacha', categoria: 'vegetal', stock: 'SI' },
@@ -329,6 +339,7 @@
         { id: '504', nombre: 'Pasas de uva', categoria: 'fruto', stock: 'SI' },
         { id: '505', nombre: 'Maíz tostado', categoria: 'fruto', stock: 'SI' },
         { id: '506', nombre: 'Maní japonés saborizado', categoria: 'fruto', stock: 'SI' },
+        { id: '507', nombre: 'Quinoa', categoria: 'fruto', stock: 'SI' },
         { id: '601', nombre: 'Mango', categoria: 'especial', stock: 'SI' },
         { id: '602', nombre: 'Palta', categoria: 'especial', stock: 'SI' },
         { id: '603', nombre: 'Queso azul', categoria: 'especial', stock: 'SI' },
@@ -343,7 +354,7 @@
         { id: 'add_prot', nombre: 'Proteína adicional', precio: 2000, ayuda: 'Especificar cuál (ej: Pollo, Atún, Jamón...)' },
         { id: 'add_ader', nombre: 'Aderezo adicional', precio: 2000, ayuda: 'Especificar cuál (ej: Salsa César, Dip...)' },
         { id: 'add_esp', nombre: 'Ingredientes especiales', precio: 2000, ayuda: 'Especificar cuál (ej: Palta, Mango, Lomo...)' },
-        { id: 'add_frut', nombre: 'Frutos secos', precio: 1700, ayuda: 'Especificar cuál (ej: Castañas, Nueces...)' },
+        { id: 'add_frut', nombre: 'Frutos secos', precio: 2000, ayuda: 'Especificar cuál (ej: Castañas, Nueces...)' },
         { id: 'add_veg', nombre: 'Vegetales adicionales', precio: 1000, ayuda: 'Especificar cuál (ej: Tomates cherry...)' },
         { id: 'add_leg', nombre: 'Legumbres', precio: 1000, ayuda: 'Especificar cuál (ej: Garbanzos, Choclo...)' }
       ],
@@ -438,6 +449,11 @@
       return parseCSV(csv);
     }
 
+    function isAvailable(item) {
+      const s = String(item.stock == null ? 'SI' : item.stock).trim().toUpperCase();
+      return !['NO', 'N', 'FALSE', 'FALSO', '0', 'AGOTADO', 'SIN STOCK', 'NO DISPONIBLE'].includes(s);
+    }
+
     async function syncCatalogFromSheets() {
       try {
         const [cfgRows, menuRows, saladRows, wrapRows, ingRows, addRows] = await Promise.all([
@@ -463,23 +479,39 @@
         }
         if (menuRows.length) {
           catalog.menus = menuRows.map(r => ({
-            id: r.id, codigo: r.codigo, nombre: r.nombre, descripcion: r.descripcion, stock: (r.stock || 'SI').toUpperCase()
-          }));
+            id: r.id,
+            codigo: r.codigo,
+            nombre: r.nombre || r[''] || 'Menú del día',
+            descripcion: r.descripcion,
+            stock: (r.stock || 'SI').trim().toUpperCase()
+          })).filter(isAvailable);
         }
         if (saladRows.length) {
           catalog.ensaladas = saladRows.map(r => ({
-            id: r.id, codigo: r.codigo, nombre: r.nombre, precio: parsePrice(r.precio), descripcion: r.descripcion, stock: (r.stock || 'SI').toUpperCase()
-          }));
+            id: r.id,
+            codigo: r.codigo,
+            nombre: r.nombre,
+            precio: parsePrice(r.precio),
+            descripcion: r.descripcion,
+            stock: (r.stock || 'SI').trim().toUpperCase()
+          })).filter(isAvailable);
         }
         if (wrapRows.length) {
           catalog.wraps = wrapRows.map(r => ({
-            id: r.id, nombre: r.nombre, precio: parsePrice(r.precio), descripcion: r.descripcion, stock: (r.stock || 'SI').toUpperCase()
-          }));
+            id: r.id,
+            nombre: r.nombre,
+            precio: parsePrice(r.precio),
+            descripcion: r.descripcion,
+            stock: (r.stock || 'SI').trim().toUpperCase()
+          })).filter(isAvailable);
         }
         if (ingRows.length) {
           catalog.ingredientes = ingRows.map(r => ({
-            id: r.id, nombre: r.nombre, categoria: (r.categoria || '').toLowerCase(), stock: (r.stock || 'SI').toUpperCase()
-          }));
+            id: r.id,
+            nombre: r.nombre,
+            categoria: (r.categoria || '').trim().toLowerCase(),
+            stock: (r.stock || 'SI').trim().toUpperCase()
+          })).filter(isAvailable);
         }
         if (addRows.length) {
           catalog.adicionales = addRows.map(r => ({
@@ -496,8 +528,8 @@
               nombre: r.nombre,
               precio: parsePrice(r.precio),
               descripcion: r.descripcion,
-              stock: (r.stock || 'SI').toUpperCase()
-            }));
+              stock: (r.stock || 'SI').trim().toUpperCase()
+            })).filter(isAvailable);
           }
         } catch (_) {
           // Si la pestaña aún no existe en Google Sheets, usa los ítems por defecto
@@ -512,6 +544,63 @@
       }
     }
 
+    const PRECIO_LICUADO_PROMO = 6000;
+
+    function isSmoothieProduct(item) {
+      const t = String(item.tipo || '').toLowerCase();
+      const n = String(item.nombre || '').toLowerCase();
+      return t.includes('licuado') || t.includes('smoothie') || n.includes('licuado') || n.includes('smoothie');
+    }
+
+    function isMainDishItem(i) {
+      return Boolean(
+        i.isMainDish ||
+        String(i.key).startsWith('m_') ||
+        String(i.key).startsWith('e_') ||
+        String(i.key).startsWith('w_') ||
+        String(i.key).startsWith('custom_')
+      );
+    }
+
+    function getMainDishCountInCart() {
+      return state.cart.reduce((acc, i) => acc + (isMainDishItem(i) ? i.qty : 0), 0);
+    }
+
+    function getSmoothieCountInCart() {
+      return state.cart.reduce((acc, i) => acc + (i.isSmoothie ? i.qty : 0), 0);
+    }
+
+    // Calcula para cada línea del carrito cuántas unidades tienen promo ($6.000) y cuántas van a precio normal ($8.000)
+    // Regla: 1 licuado a $6.000 por cada plato principal en el carrito
+    function getCartPricingBreakdown() {
+      let remainingPromoSlots = getMainDishCountInCart();
+      const lines = state.cart.map(item => {
+        const basePrice = item.basePrecio || item.precio || 8000;
+        if (!item.isSmoothie) {
+          return {
+            ...item,
+            promoQty: 0,
+            regularQty: item.qty,
+            basePrice,
+            lineTotal: item.qty * basePrice
+          };
+        }
+        const promoQty = Math.min(item.qty, Math.max(0, remainingPromoSlots));
+        remainingPromoSlots -= promoQty;
+        const regularQty = item.qty - promoQty;
+        const lineTotal = (promoQty * PRECIO_LICUADO_PROMO) + (regularQty * basePrice);
+        return {
+          ...item,
+          promoQty,
+          regularQty,
+          basePrice,
+          lineTotal
+        };
+      });
+      const total = lines.reduce((acc, l) => acc + l.lineTotal, 0);
+      return { lines, total, mainCount: getMainDishCountInCart(), smoothieCount: getSmoothieCountInCart() };
+    }
+
     function addToCart(item) {
       const existing = state.cart.find(c => c.key === item.key);
       if (existing) {
@@ -520,6 +609,9 @@
         state.cart.push({ ...item, qty: 1 });
       }
       renderCart();
+      if (state.activeTab === 'licuados_postres') {
+        renderActiveTab();
+      }
       showToast(`Agregado: ${item.nombre}`);
     }
 
@@ -531,46 +623,48 @@
         state.cart.splice(idx, 1);
       }
       renderCart();
+      if (state.activeTab === 'licuados_postres') {
+        renderActiveTab();
+      }
     }
 
-    function renderProductCard(item, subtitleBadge, priceVal) {
-      const inStock = item.stock !== 'NO';
+    function renderProductCard(item, subtitleBadge, priceVal, originalPriceVal = null) {
+      if (!isAvailable(item)) return '';
       return `
-        <div class="p-3.5 rounded-2xl border ${inStock ? 'border-gray-200 bg-white' : 'border-gray-200 bg-gray-100/70 opacity-75'} flex flex-col gap-2 shadow-sm">
+        <div class="p-3.5 rounded-2xl border border-gray-200 bg-white flex flex-col gap-2 shadow-sm">
           <div class="flex items-start justify-between gap-2">
             <div>
               ${subtitleBadge ? `<span class="inline-block text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md mb-1">${subtitleBadge}</span>` : ''}
               <h3 class="text-sm font-bold text-gray-900 leading-snug">${item.nombre}</h3>
             </div>
             <div class="text-right shrink-0">
+              ${originalPriceVal && originalPriceVal > priceVal ? `<div class="text-[11px] text-gray-400 line-through font-semibold">${formatPrice(originalPriceVal)}</div>` : ''}
               <div class="text-sm font-extrabold text-emerald-800">${formatPrice(priceVal)}</div>
-              ${!inStock ? `<span class="inline-block text-[10px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded-full mt-0.5">Agotado</span>` : ''}
             </div>
           </div>
           ${item.descripcion ? `<p class="text-xs text-gray-600 leading-relaxed">${item.descripcion}</p>` : ''}
           <button
             type="button"
             data-add-id="${item.id}"
-            ${!inStock ? 'disabled' : ''}
-            class="mt-1 w-full py-2 px-3 rounded-xl text-xs font-bold transition ${
-              inStock
-                ? 'brand-green text-white hover:opacity-95 active:scale-[0.99]'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }"
+            class="mt-1 w-full py-2 px-3 rounded-xl text-xs font-bold transition brand-green text-white hover:opacity-95 active:scale-[0.99]"
           >
-            ${inStock ? '+ Agregar al pedido' : 'Sin stock por hoy'}
+            + Agregar al pedido
           </button>
         </div>
       `;
     }
 
     function renderMenusAndEnsaladas() {
-      const menusHtml = catalog.menus
-        .map(m => renderProductCard(m, m.codigo, catalog.config.precio_menu))
-        .join('');
-      const ensaladasHtml = catalog.ensaladas
-        .map(e => renderProductCard(e, `Ensalada ${e.codigo}`, e.precio))
-        .join('');
+      const availableMenus = catalog.menus.filter(isAvailable);
+      const availableEnsaladas = catalog.ensaladas.filter(isAvailable);
+
+      const menusHtml = availableMenus.length
+        ? availableMenus.map(m => renderProductCard(m, m.codigo, catalog.config.precio_menu)).join('')
+        : `<p class="text-xs text-gray-500 italic bg-white p-3 rounded-xl border border-gray-200">No hay menús del día disponibles en este momento.</p>`;
+
+      const ensaladasHtml = availableEnsaladas.length
+        ? availableEnsaladas.map(e => renderProductCard(e, `Ensalada ${e.codigo}`, e.precio)).join('')
+        : `<p class="text-xs text-gray-500 italic bg-white p-3 rounded-xl border border-gray-200">No hay ensaladas disponibles en este momento.</p>`;
 
       return `
         <div class="space-y-4">
@@ -585,7 +679,7 @@
           <div class="pt-2 border-t border-gray-200 space-y-2.5">
             <div class="flex items-center justify-between">
               <h2 class="text-base font-extrabold text-gray-900">🥗 Ensaladas de la casa</h2>
-              <span class="text-xs font-semibold text-gray-500">${catalog.ensaladas.length} opciones</span>
+              <span class="text-xs font-semibold text-gray-500">${availableEnsaladas.length} opciones</span>
             </div>
             <div class="space-y-2.5">${ensaladasHtml}</div>
           </div>
@@ -594,14 +688,15 @@
     }
 
     function renderWraps() {
-      const wrapsHtml = catalog.wraps
-        .map(w => renderProductCard(w, 'Wrap / Omelette', w.precio))
-        .join('');
+      const availableWraps = catalog.wraps.filter(isAvailable);
+      const wrapsHtml = availableWraps.length
+        ? availableWraps.map(w => renderProductCard(w, 'Wrap / Omelette', w.precio)).join('')
+        : `<p class="text-xs text-gray-500 italic bg-white p-3 rounded-xl border border-gray-200">No hay wraps ni omelettes disponibles en este momento.</p>`;
       return `
         <div class="space-y-3">
           <div class="flex items-center justify-between">
             <h2 class="text-base font-extrabold text-gray-900">🌯 Wraps y Omelettes</h2>
-            <span class="text-xs font-semibold text-gray-500">${catalog.wraps.length} opciones</span>
+            <span class="text-xs font-semibold text-gray-500">${availableWraps.length} opciones</span>
           </div>
           <div class="space-y-2.5">${wrapsHtml}</div>
         </div>
@@ -609,18 +704,37 @@
     }
 
     function renderLicuadosPostres() {
-      const licuados = catalog.licuadosPostres.filter(i => i.tipo.toLowerCase().includes('licuado') || i.tipo.toLowerCase().includes('smoothie'));
-      const postres = catalog.licuadosPostres.filter(i => !i.tipo.toLowerCase().includes('licuado') && !i.tipo.toLowerCase().includes('smoothie'));
+      const availableLP = catalog.licuadosPostres.filter(isAvailable);
+      const licuados = availableLP.filter(i => isSmoothieProduct(i));
+      const postres = availableLP.filter(i => !isSmoothieProduct(i));
+      const mainCount = getMainDishCountInCart();
+      const smoothieCount = getSmoothieCountInCart();
+      const availablePromos = Math.max(0, mainCount - smoothieCount);
+      const showPromoPriceOnCards = availablePromos > 0;
+
+      let bannerMsg = '';
+      if (mainCount === 0) {
+        bannerMsg = '💡 <strong>Promo Combo:</strong> Llevando un Menú del día, Ensalada, Wrap u Omelette, podés sumar <strong>1 licuado a $6.000</strong> (en vez de $8.000) por cada plato principal.';
+      } else if (availablePromos > 0) {
+        bannerMsg = `✅ Tenés <strong>${mainCount}</strong> plato(s) principal(es) en tu pedido: podés sumar <strong>${availablePromos} licuado(s) más a $6.000</strong> c/u (los adicionales sin plato quedan a $8.000).`;
+      } else {
+        bannerMsg = `ℹ️ Ya aplicaste tus <strong>${mainCount}</strong> licuado(s) en promo a <strong>$6.000</strong> (1 por plato principal). Los licuados extra se suman al valor regular de <strong>$8.000</strong>.`;
+      }
 
       return `
         <div class="space-y-4">
           <div class="space-y-2.5">
             <div class="flex items-center justify-between">
               <h2 class="text-base font-extrabold text-gray-900">🥤 Licuados y Smoothies</h2>
-              <span class="text-xs font-semibold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">Naturales</span>
+              <span class="text-xs font-semibold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                ${showPromoPriceOnCards ? `🎉 ${availablePromos} disponible(s) a $6.000` : 'Naturales'}
+              </span>
+            </div>
+            <div class="text-xs rounded-xl px-3 py-2 border ${mainCount > 0 ? 'bg-emerald-50 border-emerald-300 text-emerald-900 font-semibold' : 'bg-amber-50 border-amber-200 text-amber-900'}">
+              ${bannerMsg}
             </div>
             <div class="space-y-2.5">
-              ${licuados.map(item => renderProductCard(item, item.tipo, item.precio)).join('')}
+              ${licuados.length ? licuados.map(item => renderProductCard(item, showPromoPriceOnCards ? 'Licuado / Smoothie · Promo con plato' : item.tipo, showPromoPriceOnCards ? PRECIO_LICUADO_PROMO : item.precio, showPromoPriceOnCards ? item.precio : null)).join('') : `<p class="text-xs text-gray-500 italic bg-white p-3 rounded-xl border border-gray-200">No hay licuados disponibles en este momento.</p>`}
             </div>
           </div>
 
@@ -630,7 +744,7 @@
               <span class="text-xs font-semibold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">Caseros</span>
             </div>
             <div class="space-y-2.5">
-              ${postres.map(item => renderProductCard(item, item.tipo, item.precio)).join('')}
+              ${postres.length ? postres.map(item => renderProductCard(item, item.tipo, item.precio)).join('') : `<p class="text-xs text-gray-500 italic bg-white p-3 rounded-xl border border-gray-200">No hay postres disponibles en este momento.</p>`}
             </div>
           </div>
         </div>
@@ -665,7 +779,7 @@
       const total = getCustomSaladTotal();
 
       const stepsHtml = steps.map(step => {
-        const items = catalog.ingredientes.filter(i => i.categoria === step.key && i.stock !== 'NO');
+        const items = catalog.ingredientes.filter(i => i.categoria === step.key && isAvailable(i));
         return `
           <div class="bg-gray-50 rounded-2xl p-3 border border-gray-200 space-y-2">
             <div class="flex items-center justify-between">
@@ -767,7 +881,8 @@
 
     function renderCart() {
       const count = state.cart.reduce((acc, i) => acc + i.qty, 0);
-      const total = state.cart.reduce((acc, i) => acc + i.qty * i.precio, 0);
+      const breakdown = getCartPricingBreakdown();
+      const total = breakdown.total;
 
       document.getElementById('cart-title').textContent = `Tu pedido (${count})`;
       document.getElementById('footer-total').textContent = formatPrice(total);
@@ -779,12 +894,22 @@
         return;
       }
 
-      listEl.innerHTML = state.cart.map(item => `
+      listEl.innerHTML = breakdown.lines.map(item => {
+        let promoNote = '';
+        if (item.isSmoothie && item.promoQty > 0) {
+          if (item.regularQty === 0) {
+            promoNote = `<div class="text-[11px] font-semibold text-emerald-700 mt-0.5">🎉 ${item.promoQty}x con Promo plato principal ($6.000 c/u)</div>`;
+          } else {
+            promoNote = `<div class="text-[11px] font-semibold text-emerald-700 mt-0.5">🎉 ${item.promoQty}x en Promo ($6.000) + ${item.regularQty}x regular (${formatPrice(item.basePrice)})</div>`;
+          }
+        }
+        return `
         <div class="bg-white p-3 rounded-xl border border-gray-200 flex items-start justify-between gap-2">
           <div class="min-w-0 flex-1">
             <div class="text-xs font-bold text-gray-900">${item.nombre}</div>
             ${item.detalle ? `<div class="text-[11px] text-gray-500 mt-0.5 leading-snug">${item.detalle}</div>` : ''}
-            <div class="text-xs font-extrabold text-emerald-800 mt-1">${formatPrice(item.precio * item.qty)}</div>
+            ${promoNote}
+            <div class="text-xs font-extrabold text-emerald-800 mt-1">${formatPrice(item.lineTotal)}</div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
             <button type="button" data-cart-dec="${item.key}" class="w-7 h-7 rounded-lg brand-green text-white font-bold text-sm flex items-center justify-center">-</button>
@@ -792,18 +917,22 @@
             <button type="button" data-cart-inc="${item.key}" class="w-7 h-7 rounded-lg brand-green text-white font-bold text-sm flex items-center justify-center">+</button>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     function findCatalogProduct(id) {
       const m = catalog.menus.find(x => x.id === id);
-      if (m) return { key: `m_${m.id}`, nombre: `${m.codigo}: ${m.nombre}`, precio: catalog.config.precio_menu };
+      if (m) return { key: `m_${m.id}`, nombre: `${m.codigo}: ${m.nombre}`, precio: catalog.config.precio_menu, isMainDish: true };
       const e = catalog.ensaladas.find(x => x.id === id);
-      if (e) return { key: `e_${e.id}`, nombre: `Ensalada ${e.nombre}`, precio: e.precio };
+      if (e) return { key: `e_${e.id}`, nombre: `Ensalada ${e.nombre}`, precio: e.precio, isMainDish: true };
       const w = catalog.wraps.find(x => x.id === id);
-      if (w) return { key: `w_${w.id}`, nombre: w.nombre, precio: w.precio };
+      if (w) return { key: `w_${w.id}`, nombre: w.nombre, precio: w.precio, isMainDish: true };
       const lp = catalog.licuadosPostres.find(x => x.id === id);
-      if (lp) return { key: `lp_${lp.id}`, nombre: lp.nombre, precio: lp.precio };
+      if (lp) {
+        const isSmoothie = isSmoothieProduct(lp);
+        return { key: `lp_${lp.id}`, nombre: lp.nombre, precio: lp.precio, basePrecio: lp.precio, isSmoothie };
+      }
       return null;
     }
 
@@ -856,7 +985,8 @@
         key: `custom_${Date.now()}`,
         nombre: 'Ensalada Armá tu gusto',
         detalle,
-        precio: total
+        precio: total,
+        isMainDish: true
       });
 
       state.customSalad.selectedIngredients = [];
@@ -932,6 +1062,7 @@
     document.getElementById('clear-cart-btn').addEventListener('click', () => {
       state.cart = [];
       renderCart();
+      if (state.activeTab === 'licuados_postres') renderActiveTab();
       showToast('Pedido vaciado');
     });
 
@@ -990,11 +1121,20 @@
         ? `💳 *Forma de pago:* Transferencia (Alias: ${catalog.config.alias}) — *Adjunto comprobante de transferencia*`
         : `💵 *Forma de pago:* EFECTIVO al recibir${cashAmount ? ` (Abona con: ${cashAmount})` : ''}`;
 
-      const total = state.cart.reduce((acc, i) => acc + i.qty * i.precio, 0);
+      const breakdown = getCartPricingBreakdown();
+      const total = breakdown.total;
       const lines = [
         '🥗 *Nuevo Pedido — Tu Vianda Sana*',
         '',
-        ...state.cart.map(i => `• ${i.qty}x ${i.nombre} (${formatPrice(i.qty * i.precio)})${i.detalle ? `\n  _${i.detalle}_` : ''}`),
+        ...breakdown.lines.map(i => {
+          let promoTag = '';
+          if (i.isSmoothie && i.promoQty > 0) {
+            promoTag = i.regularQty === 0
+              ? ` [Promo con plato $6.000 c/u]`
+              : ` [${i.promoQty}x Promo $6.000 + ${i.regularQty}x ${formatPrice(i.basePrice)}]`;
+          }
+          return `• ${i.qty}x ${i.nombre}${promoTag} (${formatPrice(i.lineTotal)})${i.detalle ? `\n  _${i.detalle}_` : ''}`;
+        }),
         '',
         `💰 *Total:* ${formatPrice(total)}`,
         paymentLine,
