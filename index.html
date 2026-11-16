@@ -134,6 +134,26 @@
           <p class="text-xs text-emerald-700">Combinaciones listas para pedir • Se ocultan automáticamente si no hay stock</p>
         </div>
         <div id="ensaladas-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+
+        <!-- Aderezo adicional debajo de las Ensaladas de la Casa -->
+        <div class="mt-5 pt-4 border-t border-emerald-100 bg-emerald-50/50 rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <div>
+              <h3 class="text-sm font-extrabold text-emerald-950">🥫 Aderezo adicional</h3>
+              <p id="house-ader-help" class="text-xs text-emerald-700">Elegí un aderezo extra para sumar a tu ensalada de la casa o menú</p>
+            </div>
+            <span id="house-ader-price" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900">$2.000 c/u</span>
+          </div>
+          <div id="house-ader-chips" class="flex flex-wrap gap-2"></div>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <input id="house-ader-note" type="text" placeholder="Aclaración opcional (ej: aderezo aparte, extra dip...)"
+              class="flex-1 rounded-xl border border-emerald-200 bg-white px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            <button id="add-house-ader-btn" type="button"
+              class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-sm transition cursor-pointer shrink-0">
+              + Agregar aderezo adicional ($2.000)
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -356,11 +376,25 @@
         limite_aderezo: 1
       },
       menus: [
-        { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Sorrentinos JYQ', descripcion: 'Sorrentinos de jamon y queso con carne picada en salsa boloñesa, incluye pan y queso rallado', stock: 'SI' },
+        { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Wok Power Proteico', descripcion: 'Bowl saludable de arroz con carne picada y vegetales salteados', stock: 'SI' },
         { id: 'm2', codigo: '1.2 Opción 2', nombre: 'Guiso de Lentejas', descripcion: 'Guiso casero nutritivo de lentejas seleccionadas.', stock: 'NO' }
       ],
       ensaladas: [
-        { id: 'h4', codigo: '2.4', nombre: '🥓 César', precio: 15000, descripcion: 'Lechuga, crutones, pollo, panceta, queso y salsa césar.', stock: 'SI' }
+        { id: 'h1', codigo: '2.1', nombre: '🥘 Power Bowl Integral', precio: 15000, descripcion: 'Tallarines integrales con arvejas, calabaza, huevo, zanahoria, pollo y aderezo de la casa.', stock: 'NO' },
+        { id: 'h2', codigo: '2.2', nombre: '🌴 Premium Tropical', precio: 15000, descripcion: 'Lechuga, fetas de lomo, queso azul, mango, palta, tomates cherry, crutones y aderezo de la casa.', stock: 'SI' },
+        { id: 'h3', codigo: '2.3', nombre: '🥚 Proteica', precio: 15000, descripcion: 'Lechuga, zanahoria, palta, quinoa, huevo duro, pechuga de pollo, crutones y aderezo de la casa.', stock: 'SI' },
+        { id: 'h4', codigo: '2.4', nombre: '🥓 César', precio: 15000, descripcion: 'Lechuga, crutones, pollo, panceta, queso y salsa césar.', stock: 'SI' },
+        { id: 'h5', codigo: '2.5', nombre: '🌽 Clásica', precio: 15000, descripcion: 'Lechuga, zanahoria, cherry, choclo, queso y pollo.', stock: 'SI' },
+        { id: 'h6', codigo: '2.6', nombre: '🐟 Mediterránea', precio: 15000, descripcion: 'Fideos de vegetales, zanahoria, cherry, atún, huevo y lechuga.', stock: 'SI' },
+        { id: 'h7', codigo: '2.7', nombre: '🥭 Ensalada Tropical Crunch', precio: 15000, descripcion: 'Lechuga, queso, fetas de lomo, nueces, mango y palta. Acompañada de dip de la casa y croutones artesanales.', stock: 'NO' },
+        { id: 'h8', codigo: '2.8', nombre: '👑 Premium Tropical', precio: 15000, descripcion: 'Lechuga, cherry, choclo, pollo desmechado, queso y palta. Acompañado de crutones artesanales y el dip de la casa.', stock: 'NO' },
+        { id: 'h9', codigo: '2.9', nombre: '🥑 Ensalada Brisa Gourmet', precio: 15000, descripcion: 'Mix de rúcula y lechuga, queso azul, fetas de lomo, nueces, palta y mango. Acompañada con nuestro aderezo de la casa y croutones artesanales.', stock: 'NO' },
+        { id: 'h10', codigo: '2.10', nombre: '🥗 Ensalada Protein Crunch', precio: 15000, descripcion: 'Mix de rúcula y lechuga, tallarines integrales con lentejas, cubos de pollo crunchy, huevo, palta y tomates cherrys. Acompañada con nuestro aderezo de la casa y croutones artesanales.', stock: 'NO' },
+        { id: 'h11', codigo: '2.11', nombre: '💪🏼 Fit y Fresh', precio: 15000, descripcion: 'Mix de verdes, quinoa, pollo, huevo duro, choclo y cherry. Acompañado del aderezo de la casa y fruta como postre.', stock: 'NO' },
+        { id: 'h12', codigo: '2.12', nombre: '🥑 Crunchy Deli', precio: 15000, descripcion: 'Lechuga, arroz yamaní, pollo crunchy en cubos, palta, queso y zanahoria. Acompañado de nuestros crutones artesanales y el dip de la casa, incluye fruta como postre.', stock: 'NO' },
+        { id: 'h13', codigo: '2.13', nombre: '🥒 La Refrescante', precio: 15000, descripcion: 'Lechuga, pepino, cebolla morada, cherry, pollo y queso. Acompañado de nuestros crutones artesanales y el dip de la casa, incluye fruta como postre.', stock: 'NO' },
+        { id: 'h14', codigo: '2.14', nombre: '🫜 Ensalada de la Casa (Vital)', precio: 15000, descripcion: 'Lechuga, zanahoria, remolacha, choclo, huevo duro, pollo desmechado. Acompañada de crutones artesanales, el dip de la casa y fruta como postre.', stock: 'NO' },
+        { id: 'h15', codigo: '2.15', nombre: '👑 La Consentida (De Autoría)', precio: 15000, descripcion: 'Lechuga, zanahoria, queso rallado, queso azul, pollo y crutones. Acompañado de un dip especial 😍.', stock: 'SI' }
       ],
       wraps: [
         { id: 'w1', nombre: 'Wrap de Pollo & Vegetales', precio: 15000, descripcion: 'Tortilla tibia con pollo grillado, hojas verdes, zanahoria, queso y aderezo de la casa.', stock: 'NO' },
@@ -440,6 +474,7 @@
       cart: [],
       armaSelection: [],
       armaAdicionales: {},
+      selectedHouseAderezo: 'Dip de la casa',
       paymentMethod: 'transferencia',
       paymentWallet: 'Banco',
       activeTab: 'menus'
@@ -695,6 +730,38 @@
             </div>
           </div>
         `).join('');
+      }
+
+      const aderExtra = state.catalog.adicionales.find(a => a.id === 'add_ader' || a.nombre.toLowerCase().includes('aderezo')) || {
+        id: 'add_ader',
+        nombre: 'Aderezo adicional',
+        precio: 2000,
+        ayuda: 'Elegí un aderezo extra para sumar a tu ensalada de la casa o menú'
+      };
+      document.getElementById('house-ader-price').textContent = `${formatARS(aderExtra.precio)} c/u`;
+      document.getElementById('add-house-ader-btn').textContent = `+ Agregar aderezo adicional (${formatARS(aderExtra.precio)})`;
+
+      const availAderezos = state.catalog.ingredientes.filter(i => i.categoria === 'aderezo' && isAvailable(i.stock));
+      const chipsContainer = document.getElementById('house-ader-chips');
+      if (availAderezos.length === 0) {
+        chipsContainer.innerHTML = '<span class="text-xs text-emerald-700">Escribí abajo qué aderezo adicional deseás agregar.</span>';
+      } else {
+        if (!availAderezos.some(a => a.nombre === state.selectedHouseAderezo)) {
+          state.selectedHouseAderezo = availAderezos[0].nombre;
+        }
+        chipsContainer.innerHTML = availAderezos.map(ad => {
+          const active = state.selectedHouseAderezo === ad.nombre;
+          return `
+            <button type="button" data-house-ader="${ad.nombre}"
+              class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${
+                active
+                  ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                  : 'bg-white text-emerald-950 border-emerald-200 hover:border-emerald-400'
+              }">
+              ${active ? '✓ ' : ''}${ad.nombre}
+            </button>
+          `;
+        }).join('');
       }
     }
 
@@ -1001,6 +1068,13 @@
         return;
       }
 
+      const houseAderChip = e.target.closest('[data-house-ader]');
+      if (houseAderChip) {
+        state.selectedHouseAderezo = houseAderChip.dataset.houseAder;
+        renderMenusAndSalads();
+        return;
+      }
+
       const wrapBtn = e.target.closest('[data-add-wrap]');
       if (wrapBtn) {
         const w = state.catalog.wraps.find(x => x.id === wrapBtn.dataset.addWrap);
@@ -1060,6 +1134,31 @@
         updateCartQty(qtyBtn.dataset.cartQty, Number(qtyBtn.dataset.delta));
         return;
       }
+    });
+
+    document.getElementById('add-house-ader-btn').addEventListener('click', () => {
+      const aderExtra = state.catalog.adicionales.find(a => a.id === 'add_ader' || a.nombre.toLowerCase().includes('aderezo')) || {
+        id: 'add_ader',
+        nombre: 'Aderezo adicional',
+        precio: 2000
+      };
+      const availAderezos = state.catalog.ingredientes.filter(i => i.categoria === 'aderezo' && isAvailable(i.stock));
+      const selectedChip = availAderezos.length > 0 ? state.selectedHouseAderezo : '';
+      const note = document.getElementById('house-ader-note').value.trim();
+      const detailParts = [];
+      if (selectedChip) detailParts.push(selectedChip);
+      if (note) detailParts.push(note);
+      const detailStr = detailParts.length > 0 ? detailParts.join(' • ') : 'Para ensalada de la casa';
+
+      addToCart({
+        key: `house_ader_${detailStr.toLowerCase()}`,
+        name: aderExtra.nombre,
+        detail: detailStr,
+        basePrice: aderExtra.precio,
+        isMainDish: false,
+        isSmoothie: false
+      });
+      document.getElementById('house-ader-note').value = '';
     });
 
     document.getElementById('reset-arma-btn').addEventListener('click', () => {
