@@ -190,23 +190,67 @@
             </button>
           </div>
 
-          <div id="transfer-panel" class="space-y-2 bg-emerald-50/80 border border-emerald-200 rounded-xl p-3 text-xs">
-            <div class="flex items-center justify-between gap-2">
-              <div>
-                <span class="text-gray-600">Alias transferencia: </span>
-                <strong id="alias-text" class="text-emerald-900">tuvianda.sana</strong>
+          <div id="transfer-panel" class="space-y-3 bg-emerald-50/90 border border-emerald-300 rounded-2xl p-3.5 text-xs">
+            <div class="bg-white rounded-xl p-2.5 border border-emerald-200 space-y-1.5">
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Cuenta destino: Tu Vianda Sana</div>
+                  <div class="text-xs text-gray-700 mt-0.5">Alias: <strong id="alias-text" class="text-emerald-950 font-extrabold text-sm">tuvianda.sana</strong></div>
+                </div>
+                <button type="button" id="copy-alias-btn" class="font-bold text-emerald-800 hover:text-emerald-950 px-3 py-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 shrink-0 transition">
+                  📋 Copiar alias
+                </button>
               </div>
-              <button type="button" id="copy-alias-btn" class="font-bold text-emerald-700 hover:text-emerald-900 px-2.5 py-1 rounded-lg bg-white border border-emerald-200 shrink-0">
-                Copiar
-              </button>
+              <div class="flex items-center justify-between pt-1.5 border-t border-gray-100 text-[11px]">
+                <span class="text-gray-600 font-medium">Monto exacto a transferir:</span>
+                <strong id="transfer-amount-badge" class="text-emerald-900 font-extrabold text-sm">$0</strong>
+              </div>
             </div>
-            <p class="text-[11px] text-emerald-900 leading-snug">
-              📌 Para que tu orden llegue a preparación en Tu Vianda Sana, realizá la transferencia y adjuntá el comprobante al enviar el WhatsApp.
-            </p>
-            <label class="flex items-start gap-2 pt-1 cursor-pointer select-none">
-              <input id="transfer-confirm" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-emerald-400 text-emerald-700 focus:ring-emerald-600" />
-              <span class="text-[11px] font-semibold text-emerald-950 leading-snug">
-                Confirmo que ya transferí el total y adjuntaré el comprobante en WhatsApp.
+
+            <!-- Paso 1: Redirección directa a Billeteras / Bancos -->
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-extrabold text-emerald-950">1️⃣ Elegí tu billetera o banco (copia el alias y te redirige):</div>
+              <div class="grid grid-cols-2 gap-1.5">
+                <button type="button" data-wallet="mercadopago" class="wallet-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-[#009EE3] hover:opacity-95 text-white font-bold text-[11px] shadow-sm transition">
+                  <span>🤝</span><span>Abrir Mercado Pago</span>
+                </button>
+                <button type="button" data-wallet="modobanco" class="wallet-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-emerald-800 hover:opacity-95 text-white font-bold text-[11px] shadow-sm transition">
+                  <span>🏦</span><span>MODO / App Banco</span>
+                </button>
+                <button type="button" data-wallet="naranjax" class="wallet-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-[#FF5000] hover:opacity-95 text-white font-bold text-[11px] shadow-sm transition">
+                  <span>🍊</span><span>Naranja X</span>
+                </button>
+                <button type="button" data-wallet="uala" class="wallet-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-[#3B49DF] hover:opacity-95 text-white font-bold text-[11px] shadow-sm transition">
+                  <span>💳</span><span>Ualá / Otra App</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Paso 2: Cargar / Adjuntar Comprobante e ID de operación -->
+            <div class="bg-white rounded-xl p-2.5 border border-emerald-200 space-y-2">
+              <div class="text-[11px] font-extrabold text-emerald-950">2️⃣ Cargá tu comprobante de pago a Tu Vianda Sana:</div>
+              <div>
+                <label for="receipt-file" class="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-xl border-2 border-dashed border-emerald-400 bg-emerald-50/60 hover:bg-emerald-100/70 text-emerald-900 font-bold text-xs cursor-pointer transition text-center">
+                  <span>📎</span>
+                  <span id="receipt-file-label">Seleccionar captura o PDF del comprobante</span>
+                </label>
+                <input id="receipt-file" type="file" accept="image/*,application/pdf" class="hidden" />
+                <div id="receipt-preview-box" class="hidden mt-1.5 flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-lg px-2.5 py-1.5 text-[11px] text-emerald-900">
+                  <span id="receipt-filename" class="font-semibold truncate">comprobante.jpg</span>
+                  <button type="button" id="remove-receipt-btn" class="text-red-600 font-bold ml-2 hover:underline">Quitar</button>
+                </div>
+              </div>
+              <div>
+                <label for="transfer-op-id" class="block text-[11px] font-semibold text-gray-600 mb-1">🔢 N° de operación / comprobante o titular (para verificar acreditación):</label>
+                <input id="transfer-op-id" type="text" placeholder="Ej: Op #8492014 o nombre del titular de la cuenta" class="w-full px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-600" />
+              </div>
+            </div>
+
+            <!-- Paso 3: Confirmación -->
+            <label class="flex items-start gap-2 pt-0.5 cursor-pointer select-none">
+              <input id="transfer-confirm" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-emerald-500 text-emerald-700 focus:ring-emerald-600" />
+              <span class="text-[11px] font-bold text-emerald-950 leading-snug">
+                Confirmo que realicé la transferencia a la cuenta de <strong>Tu Vianda Sana</strong> (<span class="underline">tuvianda.sana</span>) por el total del pedido.
               </span>
             </label>
           </div>
@@ -242,21 +286,25 @@
 
   <!-- Checkout Modal -->
   <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-black/50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 space-y-3.5 shadow-2xl">
       <div class="flex items-center justify-between">
-        <h3 class="text-lg font-extrabold text-gray-900">Confirmar pedido</h3>
+        <h3 class="text-lg font-extrabold text-gray-900">Confirmar y Enviar a Tu Vianda Sana</h3>
         <button type="button" id="close-modal-btn" class="text-gray-400 hover:text-gray-700 text-xl font-bold leading-none">&times;</button>
       </div>
-      <div id="modal-transfer-reminder" class="hidden text-xs bg-amber-50 border border-amber-300 text-amber-900 rounded-xl px-3 py-2 font-semibold">
-        📎 Al abrir WhatsApp, adjuntá la captura o PDF del comprobante de transferencia junto con este mensaje.
+      <div id="modal-transfer-reminder" class="hidden text-xs bg-emerald-50 border border-emerald-300 text-emerald-950 rounded-xl px-3 py-2.5 space-y-1">
+        <div class="font-extrabold">✅ Pago confirmado a la cuenta Tu Vianda Sana (tuvianda.sana)</div>
+        <div id="modal-receipt-status" class="text-[11px] text-emerald-900">📎 Tocá el botón para enviar el pedido y el comprobante al WhatsApp de Tu Vianda Sana.</div>
       </div>
-      <pre id="modal-summary" class="text-xs bg-gray-50 border border-gray-200 rounded-xl p-3 whitespace-pre-wrap font-sans text-gray-800 max-h-64 overflow-y-auto"></pre>
-      <div class="flex flex-col sm:flex-row gap-2">
-        <a id="whatsapp-link" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 brand-green text-white text-center font-bold text-sm py-3 px-4 rounded-xl hover:opacity-95">
-          Enviar por WhatsApp 📱
+      <pre id="modal-summary" class="text-xs bg-gray-50 border border-gray-200 rounded-xl p-3 whitespace-pre-wrap font-sans text-gray-800 max-h-60 overflow-y-auto"></pre>
+      <div class="flex flex-col gap-2">
+        <a id="whatsapp-link" href="#" target="_blank" rel="noopener noreferrer" class="w-full brand-green text-white text-center font-extrabold text-sm py-3 px-4 rounded-xl hover:opacity-95 shadow-md">
+          Enviar Pedido al WhatsApp de Tu Vianda Sana 📱
         </a>
-        <button type="button" id="copy-order-btn" class="px-4 py-3 text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl">
-          Copiar texto
+        <button type="button" id="share-receipt-file-btn" class="hidden w-full btn-yellow-highlight text-center font-extrabold text-xs py-2.5 px-4 rounded-xl">
+          📎 Compartir Comprobante + Pedido directo por WhatsApp
+        </button>
+        <button type="button" id="copy-order-btn" class="w-full px-4 py-2 text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl">
+          Copiar texto del pedido
         </button>
       </div>
     </div>
@@ -371,6 +419,11 @@
     const state = {
       activeTab: 'menus_ensaladas',
       cart: [],
+      houseExtraDressing: {
+        selectedType: 'Salsa César',
+        customNote: ''
+      },
+      receiptFile: null,
       customSalad: {
         selectedIngredients: [],
         extras: {}, // { add_id: { qty, note } }
@@ -654,6 +707,62 @@
       `;
     }
 
+    function getAderezoExtraPrice() {
+      const found = catalog.adicionales.find(a => a.id === 'add_ader' || String(a.nombre || '').toLowerCase().includes('aderezo'));
+      return found ? found.precio : 2000;
+    }
+
+    function getAvailableAderezosList() {
+      const fromIng = catalog.ingredientes.filter(i => i.categoria === 'aderezo' && isAvailable(i)).map(i => i.nombre);
+      return fromIng.length ? fromIng : ['Salsa César', 'Dip de la casa', 'Aceite, limón y sal', 'Salsa de garbanzos', 'Tradicionales (ketchup, mayonesa y mostaza)'];
+    }
+
+    function getExtraCartQty(addId) {
+      return state.cart
+        .filter(i => i.extraId === addId)
+        .reduce((acc, i) => acc + i.qty, 0);
+    }
+
+    function getExtraCartNote(addId) {
+      const item = state.cart.find(i => i.extraId === addId);
+      if (item && item.detalle) return item.detalle;
+      return (state.customSalad.extras[addId] && state.customSalad.extras[addId].note) || '';
+    }
+
+    function updateStandaloneExtraInCart(addId, delta) {
+      const addObj = catalog.adicionales.find(a => a.id === addId);
+      if (!addObj) return;
+      const key = `extra_${addId}`;
+      const existingIdx = state.cart.findIndex(c => c.key === key);
+      const currentNote = (state.customSalad.extras[addId] && state.customSalad.extras[addId].note) || '';
+
+      if (existingIdx !== -1) {
+        state.cart[existingIdx].qty += delta;
+        if (currentNote) state.cart[existingIdx].detalle = currentNote;
+        if (state.cart[existingIdx].qty <= 0) {
+          state.cart.splice(existingIdx, 1);
+          if (state.customSalad.extras[addId]) state.customSalad.extras[addId].qty = 0;
+        } else {
+          state.customSalad.extras[addId] = { qty: state.cart[existingIdx].qty, note: state.cart[existingIdx].detalle || '' };
+        }
+      } else if (delta > 0) {
+        state.cart.push({
+          key,
+          extraId: addId,
+          nombre: addObj.nombre,
+          precio: addObj.precio,
+          basePrecio: addObj.precio,
+          detalle: currentNote,
+          qty: delta,
+          isExtra: true
+        });
+        state.customSalad.extras[addId] = { qty: delta, note: currentNote };
+        showToast(`Adicional sumado al total: ${addObj.nombre} (+${formatPrice(addObj.precio)})`);
+      }
+      renderCart();
+      renderActiveTab();
+    }
+
     function renderMenusAndEnsaladas() {
       const availableMenus = catalog.menus.filter(isAvailable);
       const availableEnsaladas = catalog.ensaladas.filter(isAvailable);
@@ -666,22 +775,94 @@
         ? availableEnsaladas.map(e => renderProductCard(e, `Ensalada ${e.codigo}`, e.precio)).join('')
         : `<p class="text-xs text-gray-500 italic bg-white p-3 rounded-xl border border-gray-200">No hay ensaladas disponibles en este momento.</p>`;
 
+      const aderezoPrice = getAderezoExtraPrice();
+      const aderezosOpciones = getAvailableAderezosList();
+      if (!aderezosOpciones.includes(state.houseExtraDressing.selectedType)) {
+        state.houseExtraDressing.selectedType = aderezosOpciones[0] || 'Salsa César';
+      }
+
+      const aderezoInCartQty = state.cart
+        .filter(i => String(i.key).startsWith('house_ader_') || i.extraId === 'add_ader')
+        .reduce((acc, i) => acc + i.qty, 0);
+
       return `
-        <div class="space-y-4">
-          <div class="space-y-2.5">
-            <div class="flex items-center justify-between">
-              <h2 class="text-base font-extrabold text-gray-900">🍱 Menús del día</h2>
-              <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">${formatPrice(catalog.config.precio_menu)}</span>
+        <div class="space-y-6">
+          <!-- Bloque 1: Menús del día -->
+          <div class="bg-emerald-50/70 rounded-2xl p-3.5 border-2 border-emerald-600/30 shadow-sm space-y-3">
+            <div class="flex items-center justify-between bg-emerald-800 text-white px-3.5 py-2.5 rounded-xl shadow-sm">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🍱</span>
+                <div>
+                  <h2 class="text-sm font-extrabold uppercase tracking-wide leading-tight">Menús del Día</h2>
+                  <p class="text-[10px] text-emerald-100">Platos calientes elaborados en el día</p>
+                </div>
+              </div>
+              <span class="text-xs font-extrabold bg-yellow-400 text-emerald-950 px-2.5 py-1 rounded-full shadow-sm">${formatPrice(catalog.config.precio_menu)}</span>
             </div>
             <div class="space-y-2.5">${menusHtml}</div>
           </div>
 
-          <div class="pt-2 border-t border-gray-200 space-y-2.5">
-            <div class="flex items-center justify-between">
-              <h2 class="text-base font-extrabold text-gray-900">🥗 Ensaladas de la casa</h2>
-              <span class="text-xs font-semibold text-gray-500">${availableEnsaladas.length} opciones</span>
+          <!-- Separador visual notable entre Menús del día y Ensaladas de la casa -->
+          <div class="relative flex items-center justify-center py-1.5">
+            <div class="w-full border-t-2 border-dashed border-emerald-600/60"></div>
+            <span class="absolute bg-[#F7FAF8] px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-emerald-900 rounded-full border-2 border-emerald-500/40 shadow-sm">
+              🥗 Sección Ensaladas Frescas 🥗
+            </span>
+          </div>
+
+          <!-- Bloque 2: Ensaladas de la casa -->
+          <div class="bg-lime-50/70 rounded-2xl p-3.5 border-2 border-lime-600/30 shadow-sm space-y-3">
+            <div class="flex items-center justify-between bg-[#2D6A4F] text-white px-3.5 py-2.5 rounded-xl shadow-sm">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🥗</span>
+                <div>
+                  <h2 class="text-sm font-extrabold uppercase tracking-wide leading-tight">Ensaladas de la Casa</h2>
+                  <p class="text-[10px] text-emerald-100">Combinaciones frescas listas para disfrutar</p>
+                </div>
+              </div>
+              <span class="text-xs font-bold bg-emerald-900/60 text-emerald-50 border border-emerald-300/40 px-2.5 py-1 rounded-full">${availableEnsaladas.length} opciones</span>
             </div>
             <div class="space-y-2.5">${ensaladasHtml}</div>
+
+            <!-- Opción de Aderezo Adicional debajo de Ensaladas de la Casa -->
+            <div class="mt-4 pt-3 border-t-2 border-emerald-200/80">
+              <div class="bg-white rounded-2xl p-3.5 border-2 border-amber-300 shadow-sm space-y-2.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md mb-1">Adicional para tu ensalada</span>
+                    <h3 class="text-sm font-extrabold text-gray-900">🥣 ¿Querés agregar un Aderezo adicional?</h3>
+                    <p class="text-[11px] text-gray-600">Elegí tu aderezo extra (ej: Salsa César, Dip de la casa) y se suma directo a tu pedido.</p>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <div class="text-sm font-extrabold text-emerald-800">+${formatPrice(aderezoPrice)}</div>
+                    <div class="text-[10px] text-gray-500">c/u</div>
+                  </div>
+                </div>
+
+                <div class="space-y-1.5 pt-1">
+                  <label for="house-dressing-select" class="block text-[11px] font-bold text-gray-700">Seleccioná el aderezo adicional:</label>
+                  <select
+                    id="house-dressing-select"
+                    class="w-full px-3 py-2 text-xs font-semibold bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                  >
+                    ${aderezosOpciones.map(ad => `<option value="${ad.replace(/"/g, '&quot;')}" ${state.houseExtraDressing.selectedType === ad ? 'selected' : ''}>${ad}</option>`).join('')}
+                  </select>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-1">
+                  ${aderezoInCartQty > 0
+                    ? `<span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">✓ ${aderezoInCartQty} aderezo(s) extra en tu pedido</span>`
+                    : `<span class="text-[11px] text-gray-500">Suma +${formatPrice(aderezoPrice)} al total</span>`}
+                  <button
+                    type="button"
+                    id="add-house-dressing-btn"
+                    class="btn-yellow-highlight py-2 px-3.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shrink-0"
+                  >
+                    <span>+ Sumar aderezo (${formatPrice(aderezoPrice)})</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       `;
@@ -754,9 +935,9 @@
     function getCustomSaladTotal() {
       let extraTotal = 0;
       for (const add of catalog.adicionales) {
-        const entry = state.customSalad.extras[add.id];
-        if (entry && entry.qty > 0) {
-          extraTotal += entry.qty * add.precio;
+        const qty = getExtraCartQty(add.id);
+        if (qty > 0) {
+          extraTotal += qty * add.precio;
         }
       }
       return catalog.config.precio_arma_ensalada + extraTotal;
@@ -776,7 +957,7 @@
       const count = state.customSalad.selectedIngredients.length;
       const max = catalog.config.max_ingredientes;
       const pct = Math.min(100, Math.round((count / max) * 100));
-      const total = getCustomSaladTotal();
+      const baseSaladPrice = catalog.config.precio_arma_ensalada;
 
       const stepsHtml = steps.map(step => {
         const items = catalog.ingredientes.filter(i => i.categoria === step.key && isAvailable(i));
@@ -805,27 +986,28 @@
       }).join('');
 
       const extrasHtml = catalog.adicionales.map(add => {
-        const entry = state.customSalad.extras[add.id] || { qty: 0, note: '' };
+        const qty = getExtraCartQty(add.id);
+        const note = getExtraCartNote(add.id);
         return `
-          <div class="bg-white rounded-xl p-2.5 border border-gray-200 space-y-1.5">
+          <div class="bg-white rounded-xl p-2.5 border ${qty > 0 ? 'border-emerald-500 bg-emerald-50/30' : 'border-gray-200'} space-y-1.5">
             <div class="flex items-center justify-between gap-2">
               <div>
                 <div class="text-xs font-bold text-gray-900">${add.nombre}</div>
-                <div class="text-[11px] text-emerald-700 font-semibold">+${formatPrice(add.precio)} c/u</div>
+                <div class="text-[11px] text-emerald-700 font-semibold">+${formatPrice(add.precio)} c/u ${qty > 0 ? `<span class="text-emerald-900 font-extrabold">(Subtotal: ${formatPrice(qty * add.precio)})</span>` : ''}</div>
               </div>
               <div class="flex items-center gap-2">
                 <button type="button" data-extra-dec="${add.id}" class="w-7 h-7 rounded-lg brand-green text-white font-bold text-sm flex items-center justify-center">-</button>
-                <span class="text-xs font-bold w-4 text-center">${entry.qty}</span>
+                <span class="text-xs font-bold w-4 text-center">${qty}</span>
                 <button type="button" data-extra-inc="${add.id}" class="w-7 h-7 rounded-lg brand-green text-white font-bold text-sm flex items-center justify-center">+</button>
               </div>
             </div>
-            ${entry.qty > 0 ? `
+            ${qty > 0 ? `
               <input
                 type="text"
                 data-extra-note="${add.id}"
-                value="${entry.note.replace(/"/g, '&quot;')}"
+                value="${note.replace(/"/g, '&quot;')}"
                 placeholder="${add.ayuda}"
-                class="w-full px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                class="w-full px-2.5 py-1.5 text-xs bg-white border border-emerald-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-600"
               />
             ` : ''}
           </div>
@@ -843,25 +1025,28 @@
               <div class="h-full bg-emerald-600 transition-all duration-200" style="width: ${pct}%"></div>
             </div>
             <p class="text-[11px] text-amber-800 leading-snug">
-              ⚠️ Tu ensalada incluye hasta ${max} ingredientes entre los pasos 1 al 7. Lo que quieras sumar por encima tiene cargo extra en el paso 8.
+              ⚠️ Tu ensalada incluye hasta ${max} ingredientes entre los pasos 1 al 7. Los adicionales del paso 8 se suman automáticamente al total a pagar.
             </p>
           </div>
 
           ${stepsHtml}
 
-          <div class="bg-gray-50 rounded-2xl p-3 border border-gray-200 space-y-2">
-            <h3 class="text-xs font-extrabold text-gray-800">8. Adicionales (con cargo extra)</h3>
-            <div class="space-y-2">${extrasHtml}</div>
-          </div>
-
-          <!-- Botón resaltante amarillo armónico con la app -->
+          <!-- Botón resaltante amarillo para agregar la ensalada base -->
           <button
             type="button"
             id="add-custom-salad-btn"
             class="btn-yellow-highlight w-full py-3.5 px-4 rounded-2xl font-extrabold text-sm transition flex items-center justify-center gap-2"
           >
-            <span>+ Agregar ensalada al pedido (${formatPrice(total)})</span>
+            <span>+ Agregar ensalada armada al pedido (${formatPrice(baseSaladPrice)})</span>
           </button>
+
+          <div class="bg-gray-50 rounded-2xl p-3 border border-gray-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-extrabold text-gray-800">8. Adicionales (se suman directo al total a pagar)</h3>
+              <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Suma automática</span>
+            </div>
+            <div class="space-y-2">${extrasHtml}</div>
+          </div>
         </div>
       `;
     }
@@ -886,6 +1071,8 @@
 
       document.getElementById('cart-title').textContent = `Tu pedido (${count})`;
       document.getElementById('footer-total').textContent = formatPrice(total);
+      const transferBadge = document.getElementById('transfer-amount-badge');
+      if (transferBadge) transferBadge.textContent = formatPrice(total);
       document.getElementById('clear-cart-btn').classList.toggle('hidden', count === 0);
 
       const listEl = document.getElementById('cart-items');
@@ -970,27 +1157,17 @@
       }
 
       const ingNames = state.customSalad.selectedIngredients.map(i => i.nombre).join(', ');
-      const extrasList = [];
-      for (const add of catalog.adicionales) {
-        const entry = state.customSalad.extras[add.id];
-        if (entry && entry.qty > 0) {
-          extrasList.push(`${entry.qty}x ${add.nombre}${entry.note ? ` (${entry.note})` : ''}`);
-        }
-      }
-
-      const detalle = extrasList.length ? `${ingNames} | Adicionales: ${extrasList.join(', ')}` : ingNames;
-      const total = getCustomSaladTotal();
+      const baseSaladPrice = catalog.config.precio_arma_ensalada;
 
       addToCart({
         key: `custom_${Date.now()}`,
         nombre: 'Ensalada Armá tu gusto',
-        detalle,
-        precio: total,
+        detalle: ingNames,
+        precio: baseSaladPrice,
         isMainDish: true
       });
 
       state.customSalad.selectedIngredients = [];
-      state.customSalad.extras = {};
       renderActiveTab();
     }
 
@@ -1003,11 +1180,35 @@
       renderActiveTab();
     });
 
+    document.getElementById('tab-content').addEventListener('change', (e) => {
+      if (e.target && e.target.id === 'house-dressing-select') {
+        state.houseExtraDressing.selectedType = e.target.value;
+      }
+    });
+
     document.getElementById('tab-content').addEventListener('click', (e) => {
       const addBtn = e.target.closest('[data-add-id]');
       if (addBtn) {
         const prod = findCatalogProduct(addBtn.dataset.addId);
         if (prod) addToCart(prod);
+        return;
+      }
+
+      if (e.target.closest('#add-house-dressing-btn')) {
+        const selEl = document.getElementById('house-dressing-select');
+        const chosen = selEl ? selEl.value : state.houseExtraDressing.selectedType;
+        state.houseExtraDressing.selectedType = chosen;
+        const price = getAderezoExtraPrice();
+        const key = `house_ader_${chosen.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+        addToCart({
+          key,
+          nombre: `Aderezo adicional (${chosen})`,
+          detalle: 'Para Ensalada de la Casa',
+          precio: price,
+          basePrecio: price,
+          isExtra: true
+        });
+        renderActiveTab();
         return;
       }
 
@@ -1019,22 +1220,13 @@
 
       const incBtn = e.target.closest('[data-extra-inc]');
       if (incBtn) {
-        const id = incBtn.dataset.extraInc;
-        const curr = state.customSalad.extras[id] || { qty: 0, note: '' };
-        curr.qty += 1;
-        state.customSalad.extras[id] = curr;
-        renderActiveTab();
+        updateStandaloneExtraInCart(incBtn.dataset.extraInc, 1);
         return;
       }
 
       const decBtn = e.target.closest('[data-extra-dec]');
       if (decBtn) {
-        const id = decBtn.dataset.extraDec;
-        const curr = state.customSalad.extras[id];
-        if (curr && curr.qty > 0) {
-          curr.qty -= 1;
-          renderActiveTab();
-        }
+        updateStandaloneExtraInCart(decBtn.dataset.extraDec, -1);
         return;
       }
 
@@ -1047,32 +1239,112 @@
       const noteInput = e.target.closest('[data-extra-note]');
       if (!noteInput) return;
       const id = noteInput.dataset.extraNote;
-      if (state.customSalad.extras[id]) {
-        state.customSalad.extras[id].note = noteInput.value;
+      if (!state.customSalad.extras[id]) {
+        state.customSalad.extras[id] = { qty: getExtraCartQty(id), note: '' };
+      }
+      state.customSalad.extras[id].note = noteInput.value;
+      const cartItem = state.cart.find(c => c.extraId === id);
+      if (cartItem) {
+        cartItem.detalle = noteInput.value;
+        renderCart();
       }
     });
 
     document.getElementById('cart-items').addEventListener('click', (e) => {
       const inc = e.target.closest('[data-cart-inc]');
-      if (inc) return updateCartQty(inc.dataset.cartInc, 1);
+      if (inc) {
+        updateCartQty(inc.dataset.cartInc, 1);
+        renderActiveTab();
+        return;
+      }
       const dec = e.target.closest('[data-cart-dec]');
-      if (dec) return updateCartQty(dec.dataset.cartDec, -1);
+      if (dec) {
+        updateCartQty(dec.dataset.cartDec, -1);
+        renderActiveTab();
+        return;
+      }
     });
 
     document.getElementById('clear-cart-btn').addEventListener('click', () => {
       state.cart = [];
+      state.customSalad.extras = {};
       renderCart();
-      if (state.activeTab === 'licuados_postres') renderActiveTab();
+      renderActiveTab();
       showToast('Pedido vaciado');
     });
 
-    document.getElementById('copy-alias-btn').addEventListener('click', () => {
+    function copyAliasToClipboard(customMsg) {
       const alias = catalog.config.alias;
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(alias).then(() => showToast('Alias copiado: ' + alias)).catch(() => showToast('Alias: ' + alias));
+        navigator.clipboard.writeText(alias)
+          .then(() => showToast(customMsg || ('Alias copiado: ' + alias)))
+          .catch(() => showToast('Alias: ' + alias));
       } else {
         showToast('Alias: ' + alias);
       }
+    }
+
+    document.getElementById('copy-alias-btn').addEventListener('click', () => {
+      copyAliasToClipboard();
+    });
+
+    // Redirección a billeteras virtuales y bancos copiando automáticamente el alias de Tu Vianda Sana
+    document.querySelectorAll('[data-wallet]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wallet = btn.dataset.wallet;
+        const alias = catalog.config.alias;
+        const total = getCartPricingBreakdown().total;
+        copyAliasToClipboard(`Alias "${alias}" copiado (${formatPrice(total)}). Abriendo app de pago...`);
+
+        setTimeout(() => {
+          if (wallet === 'mercadopago') {
+            window.location.href = 'mercadopago://home';
+            setTimeout(() => {
+              if (!document.hidden) window.open('https://www.mercadopago.com.ar/home', '_blank', 'noopener');
+            }, 900);
+          } else if (wallet === 'modobanco') {
+            window.location.href = 'modo://';
+            setTimeout(() => {
+              if (!document.hidden) window.open('https://www.modo.com.ar/', '_blank', 'noopener');
+            }, 900);
+          } else if (wallet === 'naranjax') {
+            window.location.href = 'naranjax://';
+            setTimeout(() => {
+              if (!document.hidden) window.open('https://www.naranjax.com/', '_blank', 'noopener');
+            }, 900);
+          } else {
+            window.location.href = 'uala://';
+            setTimeout(() => {
+              if (!document.hidden) showToast(`Pegá el alias "${alias}" en tu app bancaria para transferir ${formatPrice(total)}`);
+            }, 700);
+          }
+        }, 250);
+      });
+    });
+
+    // Manejo de archivo de comprobante de pago
+    const receiptInput = document.getElementById('receipt-file');
+    const receiptPreviewBox = document.getElementById('receipt-preview-box');
+    const receiptFilename = document.getElementById('receipt-filename');
+    const receiptLabel = document.getElementById('receipt-file-label');
+
+    receiptInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        state.receiptFile = file;
+        receiptFilename.textContent = `✅ ${file.name}`;
+        receiptPreviewBox.classList.remove('hidden');
+        receiptLabel.textContent = 'Cambiar archivo del comprobante';
+        document.getElementById('transfer-confirm').checked = true;
+        showToast('Comprobante cargado correctamente');
+      }
+    });
+
+    document.getElementById('remove-receipt-btn').addEventListener('click', () => {
+      state.receiptFile = null;
+      receiptInput.value = '';
+      receiptPreviewBox.classList.add('hidden');
+      receiptLabel.textContent = 'Seleccionar captura o PDF del comprobante';
     });
 
     let paymentMethod = 'transferencia';
@@ -1104,6 +1376,7 @@
       const address = document.getElementById('cust-address').value.trim();
       const phone = document.getElementById('cust-phone').value.trim();
       const notes = document.getElementById('cust-notes').value.trim();
+      const opId = document.getElementById('transfer-op-id') ? document.getElementById('transfer-op-id').value.trim() : '';
 
       if (!name || !address) {
         showToast('Completá tu nombre y dirección de entrega.');
@@ -1111,14 +1384,16 @@
       }
 
       if (paymentMethod === 'transferencia' && !document.getElementById('transfer-confirm').checked) {
-        showToast('Confirmá que ya realizaste la transferencia para enviar el pedido.');
+        showToast('Confirmá que realizaste la transferencia a Tu Vianda Sana para continuar.');
         document.getElementById('payment-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
 
       const cashAmount = document.getElementById('cash-amount').value.trim();
+      const receiptAttachedText = state.receiptFile ? ` (Comprobante: ${state.receiptFile.name})` : '';
+      const opIdText = opId ? ` [Ref/Op: ${opId}]` : '';
       const paymentLine = paymentMethod === 'transferencia'
-        ? `💳 *Forma de pago:* Transferencia (Alias: ${catalog.config.alias}) — *Adjunto comprobante de transferencia*`
+        ? `💳 *Forma de pago:* Transferencia confirmada a *Tu Vianda Sana* (Alias: ${catalog.config.alias})${opIdText}${receiptAttachedText} — *Envío comprobante adjunto*`
         : `💵 *Forma de pago:* EFECTIVO al recibir${cashAmount ? ` (Abona con: ${cashAmount})` : ''}`;
 
       const breakdown = getCartPricingBreakdown();
@@ -1136,7 +1411,7 @@
           return `• ${i.qty}x ${i.nombre}${promoTag} (${formatPrice(i.lineTotal)})${i.detalle ? `\n  _${i.detalle}_` : ''}`;
         }),
         '',
-        `💰 *Total:* ${formatPrice(total)}`,
+        `💰 *Total a pagar:* ${formatPrice(total)}`,
         paymentLine,
         `👤 *Nombre:* ${name}`,
         `📍 *Dirección:* ${address}`,
@@ -1145,9 +1420,30 @@
       ].filter(Boolean).join('\n');
 
       document.getElementById('modal-transfer-reminder').classList.toggle('hidden', paymentMethod !== 'transferencia');
+      const shareReceiptBtn = document.getElementById('share-receipt-file-btn');
+      if (paymentMethod === 'transferencia' && state.receiptFile && navigator.canShare && navigator.canShare({ files: [state.receiptFile] })) {
+        shareReceiptBtn.classList.remove('hidden');
+      } else {
+        shareReceiptBtn.classList.add('hidden');
+      }
+
       document.getElementById('modal-summary').textContent = lines;
       document.getElementById('whatsapp-link').href = `https://wa.me/${catalog.config.whatsapp}?text=${encodeURIComponent(lines)}`;
       document.getElementById('checkout-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('share-receipt-file-btn').addEventListener('click', async () => {
+      if (!state.receiptFile) return;
+      const txt = document.getElementById('modal-summary').textContent;
+      try {
+        await navigator.share({
+          title: 'Pedido y Comprobante — Tu Vianda Sana',
+          text: txt,
+          files: [state.receiptFile]
+        });
+      } catch (_) {
+        window.open(document.getElementById('whatsapp-link').href, '_blank', 'noopener');
+      }
     });
 
     document.getElementById('close-modal-btn').addEventListener('click', () => {
