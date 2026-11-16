@@ -12,7 +12,7 @@
   <style>
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background-color: #f3faf5;
+      background-color: #f6fbf7;
       color: #163020;
     }
     .tab-btn {
@@ -62,7 +62,7 @@
           ↻
         </button>
         <button id="open-cart-btn" type="button"
-          class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm transition cursor-pointer">
+          class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm shadow-sm transition cursor-pointer">
           <span>🛒</span>
           <span class="hidden sm:inline">Pedido</span>
           <span id="cart-count-badge" class="bg-amber-400 text-emerald-950 font-extrabold text-xs px-2 py-0.5 rounded-full">0</span>
@@ -74,12 +74,12 @@
   <!-- Main Container -->
   <main class="max-w-5xl mx-auto px-4 pt-5 space-y-5">
     <!-- Promo Banner -->
-    <div class="rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <div class="rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
       <div>
-        <p class="text-xs uppercase tracking-wider font-bold text-emerald-100">Promo Combinada</p>
-        <p class="text-sm sm:text-base font-semibold">Sumá cualquier menú, ensalada, wrap, omelette o tequeño y llevá tu <strong>Licuado a $6.000</strong> (en vez de $8.000).</p>
+        <p class="text-xs uppercase tracking-wider font-bold text-emerald-700">Promo Combinada</p>
+        <p class="text-sm sm:text-base font-medium text-emerald-900">Sumá cualquier menú, ensalada, wrap, omelette o tequeño y llevá tu <strong class="text-emerald-950">Licuado a $6.000</strong> (en vez de $8.000).</p>
       </div>
-      <span class="text-xs bg-white/15 px-3 py-1.5 rounded-full font-semibold self-start sm:self-center shrink-0">📲 @tuviandasana1</span>
+      <span class="text-xs bg-white border border-emerald-200 text-emerald-800 px-3 py-1.5 rounded-full font-semibold self-start sm:self-center shrink-0">📲 @tuviandasana1</span>
     </div>
 
     <!-- 4 Main Palettes Navigation -->
@@ -246,20 +246,36 @@
 
         <!-- Customer Details -->
         <div class="space-y-3 pt-1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div>
+              <label for="cust-name" class="block text-xs font-bold text-emerald-900 mb-1">Nombre y Apellido *</label>
+              <input id="cust-name" type="text" placeholder="Ej: Juan Pérez"
+                class="w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            </div>
+            <div>
+              <label for="cust-phone" class="block text-xs font-bold text-emerald-900 mb-1">Teléfono *</label>
+              <input id="cust-phone" type="tel" placeholder="Ej: 299 4123456"
+                class="w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            </div>
+          </div>
           <div>
-            <label for="cust-name" class="block text-xs font-bold text-emerald-900 mb-1">Tu nombre *</label>
-            <input id="cust-name" type="text" placeholder="Ej: Juan Pérez"
+            <label for="cust-address" class="block text-xs font-bold text-emerald-900 mb-1">Dirección de entrega *</label>
+            <input id="cust-address" type="text" placeholder="Ej: Calle 123, Depto 4, Neuquén"
               class="w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           </div>
           <div>
-            <label for="cust-address" class="block text-xs font-bold text-emerald-900 mb-1">Dirección de entrega o retiro / comentarios</label>
-            <input id="cust-address" type="text" placeholder="Ej: Calle 123, Depto 4 / Retiro al mediodía"
+            <label for="cust-comments" class="block text-xs font-bold text-emerald-900 mb-1">Comentarios (opcional)</label>
+            <input id="cust-comments" type="text" placeholder="Ej: Timbre 2B, horario de entrega, sin cubiertos..."
               class="w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           </div>
+          <p id="missing-fields-hint" class="text-[11px] text-amber-800 font-semibold">Completá Nombre y Apellido, Teléfono y Dirección de entrega para habilitar el envío.</p>
 
           <!-- Payment Method -->
           <div class="rounded-2xl bg-emerald-50/60 border border-emerald-200 p-3.5 space-y-3">
             <div class="text-xs font-extrabold text-emerald-950 uppercase tracking-wide">Forma de pago *</div>
+            <div class="rounded-xl bg-amber-50 border-2 border-amber-300 px-3 py-2.5 text-xs text-amber-950 font-semibold leading-snug">
+              ⚠️ <strong>Importante:</strong> Si el pedido llega sin el comprobante de transferencia o pago, la orden <strong>no tendrá validez</strong> (con excepción del pago en efectivo).
+            </div>
             <div class="grid grid-cols-2 gap-2">
               <button type="button" data-pay="transferencia"
                 class="pay-btn active py-2.5 px-3 rounded-xl border-2 border-emerald-600 bg-white text-emerald-950 font-bold text-sm cursor-pointer">
@@ -283,6 +299,14 @@
                   Copiar alias
                 </button>
               </div>
+              <div>
+                <span class="block font-semibold text-emerald-900 mb-1.5">¿Desde qué medio transferís?</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <button type="button" data-wallet="Banco" class="wallet-btn py-1.5 px-2 rounded-lg border-2 border-emerald-500 bg-white font-bold text-[11px] text-emerald-950 cursor-pointer">🏦 Banco</button>
+                  <button type="button" data-wallet="Mercado Pago" class="wallet-btn py-1.5 px-2 rounded-lg border border-emerald-200 bg-white/80 font-semibold text-[11px] text-emerald-900 cursor-pointer">💙 Mercado Pago</button>
+                  <button type="button" data-wallet="Otra billetera virtual" class="wallet-btn py-1.5 px-2 rounded-lg border border-emerald-200 bg-white/80 font-semibold text-[11px] text-emerald-900 cursor-pointer">📱 Otra billetera</button>
+                </div>
+              </div>
               <label class="flex items-start gap-2 cursor-pointer select-none">
                 <input id="transfer-confirmed" type="checkbox" class="mt-0.5 w-4 h-4 accent-emerald-600 rounded" />
                 <span class="leading-snug">Confirmo que ya realicé la transferencia y <strong>adjuntaré la captura o PDF del comprobante</strong> en el chat de WhatsApp.</span>
@@ -291,8 +315,8 @@
 
             <!-- Efectivo Details -->
             <div id="pay-cash-box" class="hidden space-y-2 text-xs text-emerald-900">
-              <label for="cash-change" class="block font-semibold">¿Con cuánto abonás? (opcional, para llevar vuelto)</label>
-              <input id="cash-change" type="text" placeholder="Ej: Abono con $20.000 o pago justo"
+              <label for="cash-change" class="block font-bold text-emerald-950">Monto exacto con el que vas a pagar * (para llevar cambio si es necesario)</label>
+              <input id="cash-change" type="text" placeholder="Ej: $20.000 (o pago justo)"
                 class="w-full rounded-xl border border-emerald-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
             </div>
           </div>
@@ -349,7 +373,7 @@
         { id: 'lp1', tipo: 'Licuado / Smoothie', nombre: 'Antitox Express', precio: 8000, descripcion: 'Ananá ,kiwi y naranja . Refrescante y antioxidante.', stock: 'SI' },
         { id: 'lp2', tipo: 'Licuado / Smoothie', nombre: 'Línea Fresca y Detox', precio: 8000, descripcion: 'Manzana verde + kiwi + jugo de naranja + hielo. Acido, ultra refrescante y liviano. Carga natural de Vitamina C.', stock: 'SI' },
         { id: 'lp3', tipo: 'Licuado / Smoothie', nombre: 'Cítrico Tropical', precio: 8000, descripcion: 'Kiwi + frutilla + jugo de naranja Color vibrante, liviano y con sabor frutal intenso.', stock: 'SI' },
-        { id: 'lp4', tipo: 'Postre Saludable', nombre: 'Línea Clásica y Frutal', precio: 8000, descripcion: 'Frutillas + jugo de naranja recien exprimido. Balance perfecto entre la dulzura de la frutilla y la acidez citrica.', stock: 'SI' },
+        { id: 'lp4', tipo: 'Licuado / Smoothie', nombre: 'Línea Clásica y Frutal', precio: 8000, descripcion: 'Frutillas + jugo de naranja recien exprimido. Balance perfecto entre la dulzura de la frutilla y la acidez citrica.', stock: 'SI' },
         { id: 'lp5', tipo: 'Postre Saludable', nombre: 'Yogourt griego proteico', precio: 8000, descripcion: 'Bolw de yogurt griego con frutos secos', stock: 'SI' },
         { id: 'lp6', tipo: 'Postre Saludable', nombre: 'Yogourt griego frutal', precio: 7000, descripcion: 'Bolw de Yogurt griego y frutas de estación.', stock: 'SI' },
         { id: 'lp7', tipo: 'Licuado / Smoothie', nombre: 'CHOCO BANANA ENERGY', precio: 8000, descripcion: 'Banana + chocolate en polvo + avena + leche. Cremoso y super saciante. Ideal para recargar energia en la jornada.', stock: 'SI' },
@@ -417,6 +441,7 @@
       armaSelection: [],
       armaAdicionales: {},
       paymentMethod: 'transferencia',
+      paymentWallet: 'Banco',
       activeTab: 'menus'
     };
 
@@ -641,7 +666,7 @@
             <div class="flex items-center justify-between pt-2 border-t border-emerald-100">
               <span class="font-extrabold text-emerald-950">${formatARS(cfg.precio_menu)}</span>
               <button type="button" data-add-menu="${m.id}"
-                class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition cursor-pointer">
+                class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition cursor-pointer">
                 + Agregar
               </button>
             </div>
@@ -664,7 +689,7 @@
             <div class="flex items-center justify-between pt-2 border-t border-emerald-100">
               <span class="font-extrabold text-emerald-950">${formatARS(e.precio)}</span>
               <button type="button" data-add-ensalada="${e.id}"
-                class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition cursor-pointer">
+                class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition cursor-pointer">
                 + Agregar
               </button>
             </div>
@@ -689,7 +714,7 @@
           <div class="flex items-center justify-between pt-2 border-t border-amber-100">
             <span class="font-extrabold text-amber-950">${formatARS(w.precio)}</span>
             <button type="button" data-add-wrap="${w.id}"
-              class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition cursor-pointer">
+              class="px-3.5 py-2 rounded-xl bg-amber-200 hover:bg-amber-300 text-amber-950 text-xs font-bold transition cursor-pointer">
               + Agregar
             </button>
           </div>
@@ -795,7 +820,7 @@
                   <span class="font-extrabold text-rose-950">${formatARS(promoPrice)}</span>
                 </div>
                 <button type="button" data-add-pl="${l.id}"
-                  class="px-3.5 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition cursor-pointer">
+                  class="px-3.5 py-2 rounded-xl bg-rose-400 hover:bg-rose-500 text-white text-xs font-bold transition cursor-pointer">
                   + Agregar
                 </button>
               </div>
@@ -817,7 +842,7 @@
             <div class="flex items-center justify-between pt-2 border-t border-rose-100">
               <span class="font-extrabold text-rose-950">${formatARS(p.precio)}</span>
               <button type="button" data-add-pl="${p.id}"
-                class="px-3.5 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition cursor-pointer">
+                class="px-3.5 py-2 rounded-xl bg-rose-400 hover:bg-rose-500 text-white text-xs font-bold transition cursor-pointer">
                 + Agregar
               </button>
             </div>
@@ -872,9 +897,14 @@
     function updateSendButtonState() {
       const btn = document.getElementById('send-whatsapp-btn');
       const nameOk = document.getElementById('cust-name').value.trim().length > 0;
+      const phoneOk = document.getElementById('cust-phone').value.trim().length > 0;
+      const addrOk = document.getElementById('cust-address').value.trim().length > 0;
+      const fieldsOk = nameOk && phoneOk && addrOk;
+      document.getElementById('missing-fields-hint').classList.toggle('hidden', fieldsOk);
       const cartOk = state.cart.length > 0;
-      const payOk = state.paymentMethod === 'efectivo' || document.getElementById('transfer-confirmed').checked;
-      btn.disabled = !(nameOk && cartOk && payOk);
+      const cashOk = document.getElementById('cash-change').value.trim().length > 0;
+      const payOk = state.paymentMethod === 'efectivo' ? cashOk : document.getElementById('transfer-confirmed').checked;
+      btn.disabled = !(fieldsOk && cartOk && payOk);
     }
 
     function renderAll() {
@@ -1106,7 +1136,25 @@
       });
     });
 
+    document.querySelectorAll('.wallet-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.paymentWallet = btn.dataset.wallet;
+        document.querySelectorAll('.wallet-btn').forEach(b => {
+          b.classList.remove('border-2', 'border-emerald-500', 'font-bold', 'bg-white');
+          b.classList.add('border', 'border-emerald-200', 'font-semibold', 'bg-white/80');
+        });
+        btn.classList.add('border-2', 'border-emerald-500', 'font-bold', 'bg-white');
+        btn.classList.remove('border', 'border-emerald-200', 'font-semibold', 'bg-white/80');
+        if (state.paymentWallet === 'Mercado Pago') {
+          window.open('https://www.mercadopago.com.ar/', '_blank', 'noopener,noreferrer');
+        }
+      });
+    });
+
     document.getElementById('cust-name').addEventListener('input', updateSendButtonState);
+    document.getElementById('cust-phone').addEventListener('input', updateSendButtonState);
+    document.getElementById('cust-address').addEventListener('input', updateSendButtonState);
+    document.getElementById('cash-change').addEventListener('input', updateSendButtonState);
     document.getElementById('transfer-confirmed').addEventListener('change', updateSendButtonState);
 
     document.getElementById('copy-alias-btn').addEventListener('click', async () => {
@@ -1126,14 +1174,18 @@
 
     document.getElementById('send-whatsapp-btn').addEventListener('click', () => {
       const name = document.getElementById('cust-name').value.trim();
+      const phone = document.getElementById('cust-phone').value.trim();
       const addr = document.getElementById('cust-address').value.trim();
+      const comments = document.getElementById('cust-comments').value.trim();
       const cashNote = document.getElementById('cash-change').value.trim();
       const total = state.cart.reduce((s, i) => s + getEffectiveItemPrice(i) * i.qty, 0);
 
       const lines = [
         '🥗 *NUEVO PEDIDO — TU VIANDA SANA*',
         `👤 *Cliente:* ${name}`,
-        addr ? `📍 *Entrega / Notas:* ${addr}` : null,
+        `📞 *Teléfono:* ${phone}`,
+        `📍 *Dirección:* ${addr}`,
+        comments ? `📝 *Comentarios:* ${comments}` : null,
         '',
         '*Detalle del pedido:*',
         ...state.cart.map(i => {
@@ -1143,8 +1195,8 @@
         '',
         `💰 *TOTAL:* ${formatARS(total)}`,
         state.paymentMethod === 'transferencia'
-          ? `💳 *Forma de pago:* TRANSFERENCIA (Alias: ${state.catalog.config.alias}) — _Adjunto comprobante a continuación_`
-          : `💵 *Forma de pago:* EFECTIVO al recibir${cashNote ? ` (${cashNote})` : ''}`
+          ? `💳 *Forma de pago:* TRANSFERENCIA (${state.paymentWallet} • Alias: ${state.catalog.config.alias}) — _Adjunto comprobante a continuación_`
+          : `💵 *Forma de pago:* EFECTIVO al recibir — *Abona con:* ${cashNote}`
       ].filter(Boolean);
 
       const waUrl = `https://wa.me/${state.catalog.config.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
