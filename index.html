@@ -534,23 +534,59 @@
       window.__toastTimer = setTimeout(() => el.classList.add('hidden'), 2600);
     }
 
+    function normalizeHeaderKey(str) {
+      return String(str || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function normalizeCategoryKey(str) {
+      const s = normalizeHeaderKey(str);
+      if (s.startsWith('proteina')) return 'proteina';
+      if (s.startsWith('legumbre')) return 'legumbre';
+      if (s.startsWith('vegetal')) return 'vegetal';
+      if (s.startsWith('fruto')) return 'fruto';
+      if (s.startsWith('especial')) return 'especial';
+      if (s.startsWith('aderezo')) return 'aderezo';
+      if (s.startsWith('base')) return 'base';
+      return s;
+    }
+
     async function fetchSheetTab(sheetName) {
-      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&cb=${Date.now()}`;
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(sheetName)}&cb=${Date.now()}`;
       const res = await fetch(url, { cache: 'no-store' });
       const text = await res.text();
       const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?/);
       if (!match) throw new Error('Invalid gviz response');
       const json = JSON.parse(match[1]);
-      const cols = (json.table.cols || []).map(c => (c.label || c.id || '').trim().toLowerCase());
-      const rows = (json.table.rows || []).map(r => {
+      const rawCols = (json.table.cols || []).map(c => normalizeHeaderKey(c.label || ''));
+      let rawRows = json.table.rows || [];
+
+      let cols = rawCols;
+      const hasValidLabels = rawCols.some(k => ['id', 'nombre', 'horario_texto', 'precio'].includes(k));
+      if (!hasValidLabels && rawRows.length > 0) {
+        cols = (rawRows[0].c || []).map((cell, idx) =>
+          normalizeHeaderKey(cell && cell.v !== null && cell.v !== undefined ? cell.v : `col_${idx}`)
+        );
+        rawRows = rawRows.slice(1);
+      } else if (rawRows.length > 0) {
+        const firstCell = normalizeHeaderKey(rawRows[0].c && rawRows[0].c[0] ? rawRows[0].c[0].v : '');
+        if (firstCell === 'id' || firstCell === 'horario_texto') {
+          rawRows = rawRows.slice(1);
+        }
+      }
+
+      return rawRows.map(r => {
         const obj = {};
         (r.c || []).forEach((cell, idx) => {
           const key = cols[idx] || `col_${idx}`;
-          obj[key] = cell && cell.v !== null && cell.v !== undefined ? cell.v : '';
+          const val = cell && cell.v !== null && cell.v !== undefined ? cell.v : (cell && cell.f ? cell.f : '');
+          obj[key] = val;
         });
         return obj;
       });
-      return rows;
     }
 
     async function syncCatalog(manual = false) {
@@ -585,65 +621,59 @@
           };
         }
 
-        if (menuRows.length > 0) {
-          state.catalog.menus = menuRows.filter(r => r.nombre).map(r => ({
-            id: String(r.id || r.nombre),
-            codigo: r.codigo || '',
-            nombre: r.nombre,
-            descripcion: r.descripcion || '',
-            stock: r.stock || 'NO'
-          }));
-        }
+        const parsedMenus = menuRows.filter(r => r.nombre).map(r => ({
+          id: String(r.id || r.nombre),
+          codigo: r.codigo || '',
+          nombre: String(r.nombre).trim(),
+          descripcion: r.descripcion || '',
+          stock: r.stock || 'NO'
+        }));
+        if (parsedMenus.length > 0) state.catalog.menus = parsedMenus;
 
-        if (ensRows.length > 0) {
-          state.catalog.ensaladas = ensRows.filter(r => r.nombre).map(r => ({
-            id: String(r.id || r.nombre),
-            codigo: r.codigo || '',
-            nombre: r.nombre,
-            precio: parsePrice(r.precio) || 15000,
-            descripcion: r.descripcion || '',
-            stock: r.stock || 'NO'
-          }));
-        }
+        const parsedEns = ensRows.filter(r => r.nombre).map(r => ({
+          id: String(r.id || r.nombre),
+          codigo: r.codigo || '',
+          nombre: String(r.nombre).trim(),
+          precio: parsePrice(r.precio) || 15000,
+          descripcion: r.descripcion || '',
+          stock: r.stock || 'NO'
+        }));
+        if (parsedEns.length > 0) state.catalog.ensaladas = parsedEns;
 
-        if (wrapRows.length > 0) {
-          state.catalog.wraps = wrapRows.filter(r => r.nombre).map(r => ({
-            id: String(r.id || r.nombre),
-            nombre: r.nombre,
-            precio: parsePrice(r.precio) || 15000,
-            descripcion: r.descripcion || '',
-            stock: r.stock || 'NO'
-          }));
-        }
+        const parsedWraps = wrapRows.filter(r => r.nombre).map(r => ({
+          id: String(r.id || r.nombre),
+          nombre: String(r.nombre).trim(),
+          precio: parsePrice(r.precio) || 15000,
+          descripcion: r.descripcion || '',
+          stock: r.stock || 'NO'
+        }));
+        if (parsedWraps.length > 0) state.catalog.wraps = parsedWraps;
 
-        if (plRows.length > 0) {
-          state.catalog.postresLicuados = plRows.filter(r => r.nombre).map(r => ({
-            id: String(r.id || r.nombre),
-            tipo: r.tipo || 'Postre Saludable',
-            nombre: r.nombre,
-            precio: parsePrice(r.precio) || 7000,
-            descripcion: r.descripcion || '',
-            stock: r.stock || 'NO'
-          }));
-        }
+        const parsedPL = plRows.filter(r => r.nombre).map(r => ({
+          id: String(r.id || r.nombre),
+          tipo: r.tipo || 'Postre Saludable',
+          nombre: String(r.nombre).trim(),
+          precio: parsePrice(r.precio) || 7000,
+          descripcion: r.descripcion || '',
+          stock: r.stock || 'NO'
+        }));
+        if (parsedPL.length > 0) state.catalog.postresLicuados = parsedPL;
 
-        if (ingRows.length > 0) {
-          state.catalog.ingredientes = ingRows.filter(r => r.nombre).map(r => ({
-            id: String(r.id || r.nombre),
-            nombre: r.nombre,
-            categoria: String(r.categoria || '').toLowerCase().trim(),
-            stock: r.stock || 'NO'
-          }));
-        }
+        const parsedIng = ingRows.filter(r => r.nombre).map(r => ({
+          id: String(r.id || r.nombre),
+          nombre: String(r.nombre).trim(),
+          categoria: normalizeCategoryKey(r.categoria),
+          stock: r.stock || 'NO'
+        }));
+        if (parsedIng.length > 0) state.catalog.ingredientes = parsedIng;
 
-        if (addRows.length > 0) {
-          state.catalog.adicionales = addRows.filter(r => r.nombre).map(r => ({
-            id: String(r.id || r.nombre),
-            nombre: r.nombre,
-            precio: parsePrice(r.precio) || 1000,
-            ayuda: r.ayuda || ''
-          }));
-        }
+        const parsedAdd = addRows.filter(r => r.nombre).map(r => ({
+          id: String(r.id || r.nombre),
+          nombre: String(r.nombre).trim(),
+          precio: parsePrice(r.precio) || 1000,
+          ayuda: r.ayuda || ''
+        }));
+        if (parsedAdd.length > 0) state.catalog.adicionales = parsedAdd;
 
         badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> En vivo';
         badge.className = 'inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
