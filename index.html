@@ -447,7 +447,8 @@
         limite_vegetal: 6,
         limite_fruto: 1,
         limite_especial: 1,
-        limite_aderezo: 1
+        limite_aderezo: 1,
+        webhook_pedidos: ''
       },
       menus: [
         { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Wok Power Proteico', descripcion: 'Bowl saludable de arroz con carne picada y vegetales salteados', stock: 'SI' },
@@ -692,7 +693,8 @@
             limite_vegetal: Number(c.limite_vegetal) || 6,
             limite_fruto: Number(c.limite_fruto) || 1,
             limite_especial: Number(c.limite_especial) || 1,
-            limite_aderezo: Number(c.limite_aderezo) || 1
+            limite_aderezo: Number(c.limite_aderezo) || 1,
+            webhook_pedidos: String(c.webhook_pedidos || state.catalog.config.webhook_pedidos || '').trim()
           };
         }
 
@@ -1424,6 +1426,71 @@
       showToast(`Alias "${alias}" copiado`);
     });
 
+    function getArgentinaDateTimeParts() {
+      const now = new Date();
+      try {
+        const fmt = new Intl.DateTimeFormat('es-AR', {
+          timeZone: 'America/Argentina/Buenos_Aires',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        });
+        const parts = fmt.formatToParts(now);
+        const get = (t) => (parts.find(p => p.type === t) || {}).value || '';
+        const dd = get('day').padStart(2, '0');
+        const mm = get('month').padStart(2, '0');
+        const yyyy = get('year');
+        const hh = String(Number(get('hour')) % 24).padStart(2, '0');
+        const mi = get('minute').padStart(2, '0');
+        const ss = get('second').padStart(2, '0');
+        return {
+          id_pedido: `TVS-${yyyy.slice(-2)}${mm}${dd}-${hh}${mi}${ss}`,
+          fecha: `${dd}/${mm}/${yyyy}`,
+          hora: `${hh}:${mi}`
+        };
+      } catch (e) {
+        return {
+          id_pedido: `TVS-${Date.now()}`,
+          fecha: now.toLocaleDateString('es-AR'),
+          hora: now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+        };
+      }
+    }
+
+    function sendOrderToGoogleSheet(orderPayload) {
+      try {
+        const prev = JSON.parse(localStorage.getItem('tvs_orders_log_v1') || '[]');
+        prev.unshift(orderPayload);
+        localStorage.setItem('tvs_orders_log_v1', JSON.stringify(prev.slice(0, 200)));
+      } catch (e) {}
+
+      const webhookUrl = String(state.catalog.config.webhook_pedidos || '').trim();
+      if (!webhookUrl || !webhookUrl.startsWith('https://')) return;
+
+      const bodyStr = JSON.stringify(orderPayload);
+      try {
+        if (navigator.sendBeacon) {
+          const blob = new Blob([bodyStr], { type: 'text/plain;charset=utf-8' });
+          const queued = navigator.sendBeacon(webhookUrl, blob);
+          if (queued) return;
+        }
+      } catch (e) {}
+
+      try {
+        fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: bodyStr
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
     document.getElementById('send-whatsapp-btn').addEventListener('click', () => {
       const name = document.getElementById('cust-name').value.trim();
       const phone = document.getElementById('cust-phone').value.trim();
@@ -1431,9 +1498,36 @@
       const comments = document.getElementById('cust-comments').value.trim();
       const cashNote = document.getElementById('cash-change').value.trim();
       const total = state.cart.reduce((s, i) => s + getEffectiveItemPrice(i) * i.qty, 0);
+      const dt = getArgentinaDateTimeParts();
+
+      const detalleItems = state.cart.map(i => {
+        const unit = getEffectiveItemPrice(i);
+        return `${i.qty}x ${i.name}${i.detail ? ' (' + i.detail + ')' : ''} [${formatARS(unit * i.qty)}]`;
+      });
+
+      const orderPayload = {
+        id_pedido: dt.id_pedido,
+        fecha: dt.fecha,
+        hora: dt.hora,
+        cliente: name,
+        telefono: phone,
+        direccion_entrega: addr,
+        detalle_pedido: detalleItems.join(' | '),
+        total_ars: total,
+        forma_pago: state.paymentMethod === 'efectivo' ? 'Efectivo' : 'Transferencia',
+        detalle_pago_o_vuelto: state.paymentMethod === 'efectivo'
+          ? `Abona con: ${cashNote}`
+          : `${state.paymentWallet} (Alias: ${state.catalog.config.alias})`,
+        comprobante_validado: state.paymentMethod === 'efectivo' ? 'Efectivo' : 'Pendiente',
+        comentarios: comments || '',
+        estado_pedido: 'Pendiente'
+      };
+
+      sendOrderToGoogleSheet(orderPayload);
 
       const lines = [
         '🥗 *NUEVO PEDIDO — TU VIANDA SANA*',
+        `🧾 *Pedido:* ${dt.id_pedido}`,
         `👤 *Cliente:* ${name}`,
         `📞 *Teléfono:* ${phone}`,
         `📍 *Dirección:* ${addr}`,

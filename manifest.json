@@ -1,15 +1,13 @@
 {
-  "id": "/",
   "name": "Tu Vianda Sana — Pedidos Online",
   "short_name": "Tu Vianda Sana",
-  "description": "Comida saludable y entrega puntual en Neuquén. Menús del día, ensaladas de la casa, armá tu ensalada, wraps, omelettes, tequeños, licuados y postres.",
-  "start_url": "/",
+  "description": "Menús saludables del día, ensaladas gourmet, wraps, omelettes, tequeños, licuados y postres en Neuquén.",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f6fbf7",
   "theme_color": "#10b981",
-  "lang": "es-AR",
   "icons": [
     {
       "src": "/icon-192.png",
