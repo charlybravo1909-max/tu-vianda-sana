@@ -20,8 +20,8 @@
       limites: { base: 1, proteina: 2, legumbre: 5, vegetal: 6, fruto: 1, especial: 1, aderezo: 1 }
     },
     menus: [
-      { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Sorrentinos', descripcion: 'Sorrentinos de jamón y queso con carne picada en salsa boloñesa, incluye pan y queso rallado.', stock: true },
-      { id: 'm2', codigo: '1.2 Opción 2', nombre: 'Guiso de Lentejas', descripcion: 'Guiso casero nutritivo de lentejas seleccionadas.', stock: false }
+      { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Sorrentinos', precio: 15000, descripcion: 'Sorrentinos de jamón y queso con carne picada en salsa boloñesa, incluye pan y queso rallado.', stock: true },
+      { id: 'm2', codigo: '1.2 Opción 2', nombre: 'Guiso de Lentejas', precio: 15000, descripcion: 'Guiso casero nutritivo de lentejas seleccionadas.', stock: false }
     ],
     casa: [
       { id: 'h1', codigo: '2.1', nombre: '🥘 Power Bowl Integral', precio: 15000, descripcion: 'Tallarines integrales con arvejas, calabaza, huevo, zanahoria, pollo y aderezo de la casa.', stock: true },
@@ -117,7 +117,7 @@
     const filas = arr => arr.filter(r => txt(r.id));
     return {
       config,
-      menus: (t.menus ? filas(t.menus).map(r => ({ id: txt(r.id), codigo: txt(r.codigo), nombre: txt(r.nombre || r[''] || 'Menú del día'), descripcion: txt(r.descripcion), stock: hayStock(r.stock) })) : d.menus).filter(x => x.stock),
+      menus: (t.menus ? filas(t.menus).map(r => ({ id: txt(r.id), codigo: txt(r.codigo), nombre: txt(r.nombre || r[''] || 'Menú del día'), precio: num(r.precio, config.precioMenu), descripcion: txt(r.descripcion), stock: hayStock(r.stock) })).filter(x => x.precio > 0) : d.menus).filter(x => x.stock),
       casa: (t.casa ? filas(t.casa).map(r => ({ id: txt(r.id), codigo: txt(r.codigo), nombre: txt(r.nombre), precio: num(r.precio, 0), descripcion: txt(r.descripcion), stock: hayStock(r.stock) })).filter(x => x.precio > 0) : d.casa).filter(x => x.stock),
       wraps: (t.wraps ? filas(t.wraps).map(r => ({ id: txt(r.id), nombre: txt(r.nombre), precio: num(r.precio, 0), descripcion: txt(r.descripcion), stock: hayStock(r.stock) })).filter(x => x.precio > 0) : d.wraps).filter(x => x.stock),
       licuadosPostres: (t.licuadosPostres ? filas(t.licuadosPostres).map(r => ({ id: txt(r.id), tipo: txt(r.tipo || 'Licuados y Postres'), nombre: txt(r.nombre), precio: num(r.precio, 0), descripcion: txt(r.descripcion), stock: hayStock(r.stock) })).filter(x => x.precio > 0) : d.licuadosPostres).filter(x => x.stock),
@@ -136,7 +136,7 @@
       const p = lista.find(x => x.id === txt(it.id));
       if (!p) throw errorUsuario('Un plato de tu pedido ya no está en el menú. Quitalo y volvé a agregarlo.');
       if (!p.stock) throw errorUsuario(`"${p.nombre}" se quedó sin stock. Quitalo del pedido para continuar.`);
-      if (it.tipo === 'menu') return { titulo: 'Menú del día: ' + p.nombre, detalle: p.codigo, precio: cfg.precioMenu };
+      if (it.tipo === 'menu') return { titulo: 'Menú del día: ' + p.nombre, detalle: p.codigo, precio: p.precio != null ? p.precio : cfg.precioMenu };
       if (it.tipo === 'casa') return { titulo: 'Ensalada ' + p.nombre, detalle: 'Creación de la casa ' + p.codigo, precio: p.precio };
       return { titulo: p.nombre, detalle: 'Wrap / Omelette fresco', precio: p.precio };
     }

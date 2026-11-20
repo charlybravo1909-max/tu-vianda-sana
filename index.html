@@ -451,8 +451,8 @@
         webhook_pedidos: ''
       },
       menus: [
-        { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Wok Power Proteico', descripcion: 'Bowl saludable de arroz con carne picada y vegetales salteados', stock: 'SI' },
-        { id: 'm2', codigo: '1.2 Opción 2', nombre: 'Guiso de Lentejas', descripcion: 'Guiso casero nutritivo de lentejas seleccionadas.', stock: 'NO' }
+        { id: 'm1', codigo: '1.1 Opción 1', nombre: 'Wok Power Proteico', precio: 15000, descripcion: 'Bowl saludable de arroz con carne picada y vegetales salteados', stock: 'SI' },
+        { id: 'm2', codigo: '1.2 Opción 2', nombre: 'Guiso de Lentejas', precio: 15000, descripcion: 'Guiso casero nutritivo de lentejas seleccionadas.', stock: 'NO' }
       ],
       ensaladas: [
         { id: 'h1', codigo: '2.1', nombre: '🥘 Power Bowl Integral', precio: 15000, descripcion: 'Tallarines integrales con arvejas, calabaza, huevo, zanahoria, pollo y aderezo de la casa.', stock: 'NO' },
@@ -702,6 +702,7 @@
           id: String(r.id || r.nombre),
           codigo: r.codigo || '',
           nombre: String(r.nombre).trim(),
+          precio: parsePrice(r.precio) || state.catalog.config.precio_menu || 15000,
           descripcion: r.descripcion || '',
           stock: r.stock || 'NO'
         }));
@@ -790,10 +791,23 @@
     function renderMenusAndSalads() {
       const cfg = state.catalog.config;
       document.getElementById('horario-text').textContent = `${cfg.horario_texto} • Comida saludable`;
-      document.getElementById('menu-price-pill').textContent = formatARS(cfg.precio_menu);
       document.getElementById('alias-display').textContent = cfg.alias;
 
       const availMenus = state.catalog.menus.filter(m => isAvailable(m.stock));
+      const menuPill = document.getElementById('menu-price-pill');
+      if (menuPill) {
+        if (availMenus.length === 0) {
+          menuPill.classList.add('hidden');
+        } else {
+          menuPill.classList.remove('hidden');
+          const menuPrices = availMenus.map(m => m.precio || cfg.precio_menu);
+          const minMenuPrice = Math.min(...menuPrices);
+          const maxMenuPrice = Math.max(...menuPrices);
+          menuPill.textContent = minMenuPrice === maxMenuPrice
+            ? formatARS(minMenuPrice)
+            : `Desde ${formatARS(minMenuPrice)}`;
+        }
+      }
       const menusGrid = document.getElementById('menus-grid');
       if (availMenus.length === 0) {
         menusGrid.innerHTML = '<p class="text-sm text-emerald-700 col-span-full py-4 text-center">No hay menús del día disponibles en este momento.</p>';
@@ -806,7 +820,7 @@
               <p class="text-xs text-emerald-800/90 mt-1 leading-relaxed">${m.descripcion}</p>
             </div>
             <div class="flex items-center justify-between pt-2 border-t border-emerald-100">
-              <span class="font-extrabold text-emerald-950">${formatARS(cfg.precio_menu)}</span>
+              <span class="font-extrabold text-emerald-950">${formatARS(m.precio || cfg.precio_menu)}</span>
               <button type="button" data-add-menu="${m.id}"
                 class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition cursor-pointer">
                 + Agregar
@@ -1203,7 +1217,7 @@
       const menuBtn = e.target.closest('[data-add-menu]');
       if (menuBtn) {
         const m = state.catalog.menus.find(x => x.id === menuBtn.dataset.addMenu);
-        if (m) addToCart({ key: `menu_${m.id}`, name: m.nombre, detail: m.codigo || 'Menú del día', basePrice: state.catalog.config.precio_menu, isMainDish: true, isSmoothie: false });
+        if (m) addToCart({ key: `menu_${m.id}`, name: m.nombre, detail: m.codigo || 'Menú del día', basePrice: m.precio || state.catalog.config.precio_menu, isMainDish: true, isSmoothie: false });
         return;
       }
 
