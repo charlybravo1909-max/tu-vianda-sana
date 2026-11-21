@@ -118,45 +118,42 @@
 
   <!-- Main Container -->
   <main class="max-w-5xl mx-auto px-4 pt-3.5 sm:pt-5 space-y-3.5 sm:space-y-5">
-    <!-- Promo Banner (compacto y destacado) -->
-    <div class="rounded-xl bg-emerald-50 border border-emerald-200 border-l-4 border-l-emerald-500 text-emerald-950 px-3 py-2 shadow-sm flex items-center gap-2">
-      <span class="text-base leading-none shrink-0" aria-hidden="true">🥤</span>
-      <p class="text-xs leading-snug font-medium text-emerald-900">
-        <span class="font-extrabold uppercase tracking-wide text-emerald-700">Promo Combinada:</span>
-        Con cualquier comida llevá tu <strong class="text-emerald-950 font-extrabold">Licuado a $6.000</strong> <span class="text-emerald-700">(en vez de $8.000)</span>.
+    <!-- Promo Banner (ultra compacto, rojo sobre rojo pálido) -->
+    <div class="rounded-lg bg-rose-50 border border-rose-200 px-2.5 py-1.5 shadow-sm flex items-center justify-center gap-1.5 text-center">
+      <span class="text-xs leading-none shrink-0" aria-hidden="true">🥤</span>
+      <p class="text-[11px] sm:text-xs leading-tight font-semibold text-red-700">
+        <span class="font-extrabold uppercase">Promo:</span>
+        Con tu comida, <strong class="font-extrabold text-red-800">Licuado a $6.000</strong> (antes $8.000)
       </p>
     </div>
 
-    <!-- Fila "Tu meta de hoy" (Nutri-Visor desacoplado) -->
-    <div id="nutri-goal-bar-host"></div>
-
-    <!-- 4 Main Palettes Navigation (Compactas, Amarillo principal -> Verde al seleccionar) -->
-    <nav aria-label="Categorías del menú" class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+    <!-- 4 Main Palettes Navigation (Amarillo principal -> Verde al seleccionar, tamaño cómodo en celular) -->
+    <nav aria-label="Categorías del menú" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
       <button type="button" data-tab="menus"
-        class="tab-btn active text-left px-2.5 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border-2 shadow-xs cursor-pointer flex items-center gap-2">
-        <span class="tab-num w-5 h-5 sm:w-6 sm:h-6 rounded-full text-[11px] sm:text-xs font-black flex items-center justify-center shrink-0">1</span>
-        <div class="min-w-0 font-extrabold text-xs sm:text-sm leading-tight tracking-tight">🥗 Menús del día y ensaladas de la casa</div>
+        class="tab-btn active text-left px-3 py-3 sm:px-4 sm:py-3.5 rounded-2xl border-2 shadow-sm min-h-[64px] cursor-pointer flex items-center gap-2.5">
+        <span class="tab-num w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs sm:text-sm font-black flex items-center justify-center shrink-0">1</span>
+        <div class="min-w-0 font-extrabold text-[13px] sm:text-[15px] leading-snug tracking-tight">🥗 Menús del día y ensaladas de la casa</div>
       </button>
 
       <button type="button" data-tab="wraps"
-        class="tab-btn text-left px-2.5 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border-2 shadow-xs cursor-pointer flex items-center gap-2">
-        <span class="tab-num w-5 h-5 sm:w-6 sm:h-6 rounded-full text-[11px] sm:text-xs font-black flex items-center justify-center shrink-0">2</span>
-        <div class="min-w-0 font-extrabold text-xs sm:text-sm leading-tight tracking-tight">🌯 Wraps, Omelettes y Tequeños</div>
+        class="tab-btn text-left px-3 py-3 sm:px-4 sm:py-3.5 rounded-2xl border-2 shadow-sm min-h-[64px] cursor-pointer flex items-center gap-2.5">
+        <span class="tab-num w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs sm:text-sm font-black flex items-center justify-center shrink-0">2</span>
+        <div class="min-w-0 font-extrabold text-[13px] sm:text-[15px] leading-snug tracking-tight">🌯 Wraps, Omelettes y Tequeños</div>
       </button>
 
       <button type="button" id="tab-btn-arma" data-tab="arma"
-        class="tab-btn text-left px-2.5 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border-2 shadow-xs cursor-pointer flex items-center gap-2">
-        <span class="tab-num w-5 h-5 sm:w-6 sm:h-6 rounded-full text-[11px] sm:text-xs font-black flex items-center justify-center shrink-0">3</span>
+        class="tab-btn text-left px-3 py-3 sm:px-4 sm:py-3.5 rounded-2xl border-2 shadow-sm min-h-[64px] cursor-pointer flex items-center gap-2.5">
+        <span class="tab-num w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs sm:text-sm font-black flex items-center justify-center shrink-0">3</span>
         <div class="min-w-0">
-          <div class="font-extrabold text-xs sm:text-sm leading-tight tracking-tight"><span id="arma-tab-icon">🥣</span> Armá tu ensalada</div>
+          <div class="font-extrabold text-[13px] sm:text-[15px] leading-snug tracking-tight"><span id="arma-tab-icon">🥣</span> Armá tu ensalada</div>
           <div id="arma-tab-subtitle" class="tab-sub hidden text-[10px] font-bold leading-tight mt-0.5"></div>
         </div>
       </button>
 
       <button type="button" data-tab="licuados"
-        class="tab-btn text-left px-2.5 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border-2 shadow-xs cursor-pointer flex items-center gap-2">
-        <span class="tab-num w-5 h-5 sm:w-6 sm:h-6 rounded-full text-[11px] sm:text-xs font-black flex items-center justify-center shrink-0">4</span>
-        <div class="min-w-0 font-extrabold text-xs sm:text-sm leading-tight tracking-tight">🥤 Licuados y Postres</div>
+        class="tab-btn text-left px-3 py-3 sm:px-4 sm:py-3.5 rounded-2xl border-2 shadow-sm min-h-[64px] cursor-pointer flex items-center gap-2.5">
+        <span class="tab-num w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs sm:text-sm font-black flex items-center justify-center shrink-0">4</span>
+        <div class="min-w-0 font-extrabold text-[13px] sm:text-[15px] leading-snug tracking-tight">🥤 Licuados y Postres</div>
       </button>
     </nav>
 

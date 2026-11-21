@@ -104,7 +104,7 @@
   try {
     const saved = JSON.parse(localStorage.getItem('tvs_nutrivisor_v1') || 'null');
     if (saved && typeof saved === 'object') {
-      if (typeof saved.enabled === 'boolean') nvState.enabled = saved.enabled;
+      nvState.enabled = true;
       if (GOALS.some((g) => g.id === saved.goalId)) nvState.goalId = saved.goalId;
     }
   } catch (e) {}
@@ -377,58 +377,17 @@
     document.head.appendChild(style);
   }
 
+  function getAchievedGoalId(totalKcal) {
+    if (!totalKcal || totalKcal <= 0) return 'free';
+    if (totalKcal <= 450) return 'light';
+    if (totalKcal <= 650) return 'balanced';
+    return 'power';
+  }
+
   function renderGoalBar() {
+    // "Tu meta de hoy" ahora se muestra exclusivamente dentro del modal "Tu Balance"
     const host = document.getElementById('nutri-goal-bar-host');
-    if (!host) return;
-
-    host.innerHTML = `
-      <div class="rounded-2xl bg-white border border-emerald-200/90 px-3 sm:px-3.5 py-2.5 shadow-sm space-y-2">
-        <div class="flex items-center justify-between gap-2">
-          <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-800">🔥 Tu meta de hoy:</span>
-          <button type="button" id="nv-toggle-btn"
-            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold border transition cursor-pointer shrink-0 ${
-              nvState.enabled
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200'
-            }">
-            <span class="w-2 h-2 rounded-full ${nvState.enabled ? 'bg-amber-300' : 'bg-slate-400'}"></span>
-            <span>Nutri-Visor: ${nvState.enabled ? 'ON' : 'OFF'}</span>
-          </button>
-        </div>
-        <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 ${nvState.enabled ? '' : 'opacity-45 pointer-events-none'}">
-          ${GOALS.map((g) => {
-            const active = g.id === nvState.goalId;
-            return `
-              <button type="button" data-nv-goal="${g.id}"
-                class="w-full sm:w-auto px-2 sm:px-2.5 py-1.5 rounded-full text-[11.5px] sm:text-xs font-bold border transition cursor-pointer whitespace-nowrap text-center ${
-                  active
-                    ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm'
-                    : 'bg-emerald-50 text-emerald-900 border-emerald-200 hover:bg-emerald-100'
-                }">
-                ${g.icon} ${g.label}${g.kcal ? ` · ${g.kcal}` : ''}
-              </button>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
-
-    host.querySelectorAll('[data-nv-goal]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        nvState.goalId = btn.dataset.nvGoal;
-        saveNvState();
-        refreshAll();
-      });
-    });
-
-    const toggleBtn = document.getElementById('nv-toggle-btn');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => {
-        nvState.enabled = !nvState.enabled;
-        saveNvState();
-        refreshAll();
-      });
-    }
+    if (host) host.innerHTML = '';
   }
 
   function injectCardBadges(appState) {
@@ -774,22 +733,28 @@
     const root = getModalRoot();
     const panel = document.getElementById('nv-modal-panel');
     const totals = getCartNutriTotals(appState);
-    const goal = getGoal();
-    const target = goal.kcal || 650;
-    const pct = Math.min(Math.round((totals.totalKcal / target) * 100), 100);
-    const diff = goal.kcal ? goal.kcal - totals.totalKcal : null;
+
+    const achievedId = getAchievedGoalId(totals.totalKcal);
+    const achievedGoal = GOALS.find((g) => g.id === achievedId) || GOALS[3];
+    const target = achievedGoal.kcal || 650;
+    const pct = totals.totalKcal > 0 ? Math.min(Math.round((totals.totalKcal / target) * 100), 100) : 0;
+
+    const goalMetaInfo = {
+      light: { range: 'Hasta 450 kcal' },
+      balanced: { range: '451 a 650 kcal' },
+      power: { range: 'Más de 650 kcal' },
+      free: { range: 'Sin platos aún' }
+    };
 
     let statusHtml = '';
     if (totals.items.length === 0) {
-      statusHtml = '<div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 text-center text-xs text-emerald-800">Todavía no agregaste platos a tu pedido. ¡Probá sumar un menú o armar tu ensalada!</div>';
-    } else if (diff !== null) {
-      if (diff >= 90) {
-        statusHtml = `<div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-bold text-emerald-900">🌿 Te quedan ~${diff} kcal dentro de tu meta "${goal.label}" (${goal.kcal} kcal). Ideal si querés sumar un licuado o postre saludable.</div>`;
-      } else if (diff >= -80) {
-        statusHtml = `<div class="rounded-2xl bg-emerald-100 border border-emerald-300 p-3 text-xs font-bold text-emerald-950">🎯 ¡Muy buen balance! Estás cerca de tu meta "${goal.label}" (${goal.kcal} kcal).</div>`;
-      } else {
-        statusHtml = `<div class="rounded-2xl bg-amber-50 border border-amber-200 p-3 text-xs font-bold text-amber-950">🔥 Almuerzo energético (+${Math.abs(diff)} kcal aprox. sobre "${goal.label}"). Ideal para jornadas activas o pedidos compartidos.</div>`;
-      }
+      statusHtml = '<div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-3 text-center text-xs text-emerald-900">✨ Estás en modo <strong>Solo mirar</strong>. Sumá un plato o armá tu ensalada para ver qué meta estás cumpliendo hoy.</div>';
+    } else if (achievedId === 'light') {
+      statusHtml = `<div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-bold text-emerald-900">🌿 Con ~${totals.totalKcal} kcal aprox. estás cumpliendo la meta <strong>Liviano</strong> (hasta 450 kcal). ¡Súper fresca y liviana!</div>`;
+    } else if (achievedId === 'balanced') {
+      statusHtml = `<div class="rounded-2xl bg-emerald-100 border border-emerald-300 p-3 text-xs font-bold text-emerald-950">⚖️ Con ~${totals.totalKcal} kcal aprox. estás cumpliendo la meta <strong>Equilibrado</strong> (451 a 650 kcal). ¡Muy buen balance para tu almuerzo!</div>`;
+    } else {
+      statusHtml = `<div class="rounded-2xl bg-amber-50 border border-amber-200 p-3 text-xs font-bold text-amber-950">💪 Con ~${totals.totalKcal} kcal aprox. estás cumpliendo la meta <strong>Power / Fit</strong> (+650 kcal). Ideal para jornadas activas o pedidos completos.</div>`;
     }
 
     panel.innerHTML = `
@@ -803,16 +768,19 @@
         </div>
 
         <div class="bg-emerald-950 text-white rounded-2xl p-4 space-y-3">
-          <div class="flex items-end justify-between">
+          <div class="flex items-end justify-between gap-2">
             <div>
               <div class="text-xs text-emerald-300 font-semibold">Total aproximado del pedido</div>
               <div class="text-3xl font-extrabold tabular-nums">~${totals.totalKcal} <span class="text-sm font-medium text-emerald-200">kcal aprox.</span></div>
             </div>
-            ${goal.kcal ? `<div class="text-right text-xs text-emerald-200">Meta ${goal.icon}<br/><strong>${goal.kcal} kcal</strong></div>` : ''}
+            <div class="text-right text-xs text-emerald-200">
+              <span class="block text-[10px] uppercase tracking-wide text-emerald-300 font-bold">Tu meta actual</span>
+              <strong class="text-white">${achievedGoal.icon} ${achievedGoal.label}</strong>
+            </div>
           </div>
-          ${goal.kcal ? `
+          ${totals.totalKcal > 0 ? `
             <div class="h-2.5 bg-white/15 rounded-full overflow-hidden">
-              <div class="h-full rounded-full nv-macro-bar ${totals.totalKcal > goal.kcal * 1.15 ? 'bg-amber-400' : 'bg-emerald-400'}" style="width:${pct}%"></div>
+              <div class="h-full rounded-full nv-macro-bar ${achievedId === 'power' ? 'bg-amber-400' : 'bg-emerald-400'}" style="width:${pct}%"></div>
             </div>
           ` : ''}
           <div class="grid grid-cols-3 gap-2 text-center">
@@ -830,6 +798,35 @@
             </div>
           </div>
           <p class="text-[11px] text-emerald-200/90 pt-1.5 border-t border-white/10 leading-snug">ℹ️ ${APPROX_NOTICE}</p>
+        </div>
+
+        <!-- Tu meta de hoy (dentro de Tu Balance, sombreando la meta que cumple según sus calorías) -->
+        <div class="rounded-2xl bg-slate-50 border border-emerald-200/80 p-3 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-900">🔥 Tu meta de hoy</span>
+            <span class="text-[10px] font-bold text-emerald-700">Según tus calorías</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            ${GOALS.map((g) => {
+              const isCurrent = g.id === achievedId;
+              const sub = (goalMetaInfo[g.id] && goalMetaInfo[g.id].range) || '';
+              return `
+                <div class="rounded-xl px-2.5 py-2 border transition ${
+                  isCurrent
+                    ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm ring-2 ring-emerald-300'
+                    : 'bg-white text-slate-500 border-slate-200 opacity-75'
+                }">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="text-xs font-extrabold whitespace-nowrap">${g.icon} ${g.label}</span>
+                    ${isCurrent ? '<span class="text-[10px] font-black bg-amber-300 text-emerald-950 px-1.5 py-0.5 rounded-full leading-none">✓</span>' : ''}
+                  </div>
+                  <div class="text-[10px] mt-0.5 font-semibold ${isCurrent ? 'text-emerald-100' : 'text-slate-400'}">
+                    ${sub}${isCurrent ? ' · Estás acá' : ''}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
         </div>
 
         ${statusHtml}
