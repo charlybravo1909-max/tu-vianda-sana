@@ -1,5 +1,5 @@
-const CACHE_NAME = 'tu-vianda-sana-v3';
-const STATIC_ASSETS = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png'];
+const CACHE_NAME = 'tu-vianda-sana-v4';
+const STATIC_ASSETS = ['/', '/index.html', '/nutri-visor.js', '/manifest.json', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png'];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();

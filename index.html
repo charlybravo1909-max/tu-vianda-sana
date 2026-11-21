@@ -25,10 +25,34 @@
     }
     .tab-btn {
       transition: all 0.2s ease;
+      background-color: #fef3c7;
+      border-color: #fcd34d;
+      color: #78350f;
+    }
+    .tab-btn:hover:not(.active):not([aria-disabled="true"]) {
+      background-color: #fde68a;
+      border-color: #f59e0b;
+    }
+    .tab-btn .tab-num {
+      background-color: #f59e0b;
+      color: #451a03;
+    }
+    .tab-btn .tab-sub {
+      color: #92400e;
     }
     .tab-btn.active {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(22, 101, 52, 0.14);
+      background-color: #059669 !important;
+      border-color: #065f46 !important;
+      color: #ffffff !important;
+      box-shadow: 0 6px 16px rgba(5, 150, 105, 0.28);
+    }
+    .tab-btn.active .tab-num {
+      background-color: #ffffff !important;
+      color: #065f46 !important;
+    }
+    .tab-btn.active .tab-sub {
+      color: #d1fae5 !important;
     }
     .card-hover {
       transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -95,34 +119,49 @@
       <span class="text-xs bg-white border border-emerald-200 text-emerald-800 px-3 py-1.5 rounded-full font-semibold self-start sm:self-center shrink-0">📲 @tuviandasana1</span>
     </div>
 
-    <!-- 4 Main Palettes Navigation -->
-    <nav aria-label="Categorías del menú" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+    <!-- Fila "Tu meta de hoy" (Nutri-Visor desacoplado) -->
+    <div id="nutri-goal-bar-host"></div>
+
+    <!-- 4 Main Palettes Navigation (Amarillo principal -> Verde al seleccionar) -->
+    <nav aria-label="Categorías del menú" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
       <button type="button" data-tab="menus"
-        class="tab-btn active text-left p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50 text-emerald-950 cursor-pointer">
-        <div class="text-xl mb-1">🥗</div>
-        <div class="font-bold text-sm leading-tight">Menús del día y ensaladas de la casa</div>
-        <div class="text-xs text-emerald-700 mt-0.5">Platos caseros y gourmet</div>
+        class="tab-btn active text-left p-4 sm:p-4.5 rounded-2xl border-2 shadow-sm cursor-pointer flex items-start gap-2.5">
+        <span class="tab-num w-7 h-7 rounded-full text-sm font-black flex items-center justify-center shrink-0 mt-0.5">1</span>
+        <div class="min-w-0">
+          <div class="text-lg leading-none mb-1">🥗</div>
+          <div class="font-extrabold text-sm sm:text-base leading-snug tracking-tight">Menús del día y ensaladas de la casa</div>
+          <div class="tab-sub text-xs font-medium mt-0.5">Platos caseros y gourmet</div>
+        </div>
       </button>
 
       <button type="button" data-tab="wraps"
-        class="tab-btn text-left p-3.5 rounded-2xl border-2 border-amber-200 bg-amber-50/80 text-amber-950 hover:border-amber-400 cursor-pointer">
-        <div class="text-xl mb-1">🌯</div>
-        <div class="font-bold text-sm leading-tight">Wraps, Omelettes y Tequeños</div>
-        <div class="text-xs text-amber-800 mt-0.5">Opciones tibias y artesanales</div>
+        class="tab-btn text-left p-4 sm:p-4.5 rounded-2xl border-2 shadow-sm cursor-pointer flex items-start gap-2.5">
+        <span class="tab-num w-7 h-7 rounded-full text-sm font-black flex items-center justify-center shrink-0 mt-0.5">2</span>
+        <div class="min-w-0">
+          <div class="text-lg leading-none mb-1">🌯</div>
+          <div class="font-extrabold text-sm sm:text-base leading-snug tracking-tight">Wraps, Omelettes y Tequeños</div>
+          <div class="tab-sub text-xs font-medium mt-0.5">Opciones tibias y artesanales</div>
+        </div>
       </button>
 
       <button type="button" id="tab-btn-arma" data-tab="arma"
-        class="tab-btn text-left p-3.5 rounded-2xl border-2 border-lime-200 bg-lime-50/80 text-lime-950 hover:border-lime-400 cursor-pointer">
-        <div class="text-xl mb-1" id="arma-tab-icon">🥣</div>
-        <div class="font-bold text-sm leading-tight">Armá tu ensalada</div>
-        <div id="arma-tab-subtitle" class="text-xs text-lime-800 mt-0.5">Elegí hasta 6 ingredientes</div>
+        class="tab-btn text-left p-4 sm:p-4.5 rounded-2xl border-2 shadow-sm cursor-pointer flex items-start gap-2.5">
+        <span class="tab-num w-7 h-7 rounded-full text-sm font-black flex items-center justify-center shrink-0 mt-0.5">3</span>
+        <div class="min-w-0">
+          <div class="text-lg leading-none mb-1" id="arma-tab-icon">🥣</div>
+          <div class="font-extrabold text-sm sm:text-base leading-snug tracking-tight">Armá tu ensalada</div>
+          <div id="arma-tab-subtitle" class="tab-sub text-xs font-medium mt-0.5">Elegí hasta 6 ingredientes</div>
+        </div>
       </button>
 
       <button type="button" data-tab="licuados"
-        class="tab-btn text-left p-3.5 rounded-2xl border-2 border-rose-200 bg-rose-50/80 text-rose-950 hover:border-rose-400 cursor-pointer">
-        <div class="text-xl mb-1">🥤</div>
-        <div class="font-bold text-sm leading-tight">Licuados y Postres</div>
-        <div class="text-xs text-rose-800 mt-0.5">Smoothies y opciones dulces</div>
+        class="tab-btn text-left p-4 sm:p-4.5 rounded-2xl border-2 shadow-sm cursor-pointer flex items-start gap-2.5">
+        <span class="tab-num w-7 h-7 rounded-full text-sm font-black flex items-center justify-center shrink-0 mt-0.5">4</span>
+        <div class="min-w-0">
+          <div class="text-lg leading-none mb-1">🥤</div>
+          <div class="font-extrabold text-sm sm:text-base leading-snug tracking-tight">Licuados y Postres</div>
+          <div class="tab-sub text-xs font-medium mt-0.5">Smoothies y opciones dulces</div>
+        </div>
       </button>
     </nav>
 
@@ -704,6 +743,7 @@
           nombre: String(r.nombre).trim(),
           precio: parsePrice(r.precio) || state.catalog.config.precio_menu || 15000,
           descripcion: r.descripcion || '',
+          kcal: r.kcal || '',
           stock: r.stock || 'NO'
         }));
         if (parsedMenus.length > 0) state.catalog.menus = parsedMenus;
@@ -714,6 +754,7 @@
           nombre: String(r.nombre).trim(),
           precio: parsePrice(r.precio) || 15000,
           descripcion: r.descripcion || '',
+          kcal: r.kcal || '',
           stock: r.stock || 'NO'
         }));
         if (parsedEns.length > 0) state.catalog.ensaladas = parsedEns;
@@ -723,6 +764,7 @@
           nombre: String(r.nombre).trim(),
           precio: parsePrice(r.precio) || 15000,
           descripcion: r.descripcion || '',
+          kcal: r.kcal || '',
           stock: r.stock || 'NO'
         }));
         if (parsedWraps.length > 0) state.catalog.wraps = parsedWraps;
@@ -733,6 +775,7 @@
           nombre: String(r.nombre).trim(),
           precio: parsePrice(r.precio) || 7000,
           descripcion: r.descripcion || '',
+          kcal: r.kcal || '',
           stock: r.stock || 'NO'
         }));
         if (parsedPL.length > 0) state.catalog.postresLicuados = parsedPL;
@@ -741,6 +784,7 @@
           id: String(r.id || r.nombre),
           nombre: String(r.nombre).trim(),
           categoria: normalizeCategoryKey(r.categoria),
+          kcal: r.kcal || '',
           stock: r.stock || 'NO'
         }));
         if (parsedIng.length > 0) state.catalog.ingredientes = parsedIng;
@@ -1018,6 +1062,7 @@
           </div>
         `;
       }).join('');
+      notifyNutriVisor();
     }
 
     function renderLicuadosAndPostres() {
@@ -1119,6 +1164,7 @@
         }).join('');
       }
       updateSendButtonState();
+      notifyNutriVisor();
     }
 
     function updateSendButtonState() {
@@ -1134,12 +1180,18 @@
       btn.disabled = !(fieldsOk && cartOk && payOk);
     }
 
+    window.__TVS_GET_STATE__ = () => state;
+    function notifyNutriVisor() {
+      try { if (window.NutriVisor && typeof window.NutriVisor.refresh === 'function') window.NutriVisor.refresh(); } catch (e) {}
+    }
+
     function renderAll() {
       renderMenusAndSalads();
       renderWraps();
       renderArmaTuEnsalada();
       renderLicuadosAndPostres();
       renderCartUI();
+      notifyNutriVisor();
     }
 
     function getArgentinaMinutesNow() {
@@ -1669,5 +1721,6 @@
     setInterval(() => syncCatalog(false), 60000);
     setInterval(updateArmaAvailability, 30000);
   </script>
+  <script src="/nutri-visor.js" defer></script>
 </body>
 </html>
