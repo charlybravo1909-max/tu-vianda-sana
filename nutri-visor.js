@@ -382,34 +382,34 @@
     if (!host) return;
 
     host.innerHTML = `
-      <div class="rounded-2xl bg-white border border-emerald-200/90 px-3.5 py-2.5 shadow-xs flex flex-wrap items-center justify-between gap-2.5">
-        <div class="flex items-center gap-2 overflow-x-auto nv-no-scrollbar flex-1 min-w-0">
-          <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-800 shrink-0">🔥 Tu meta de hoy:</span>
-          <div class="flex items-center gap-1.5 shrink-0 ${nvState.enabled ? '' : 'opacity-45 pointer-events-none'}">
-            ${GOALS.map((g) => {
-              const active = g.id === nvState.goalId;
-              return `
-                <button type="button" data-nv-goal="${g.id}"
-                  class="px-2.5 py-1 rounded-full text-xs font-bold border transition cursor-pointer whitespace-nowrap ${
-                    active
-                      ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
-                      : 'bg-emerald-50 text-emerald-900 border-emerald-200 hover:bg-emerald-100'
-                  }">
-                  ${g.icon} ${g.label}${g.kcal ? ` · ${g.kcal}` : ''}
-                </button>
-              `;
-            }).join('')}
-          </div>
+      <div class="rounded-2xl bg-white border border-emerald-200/90 px-3 sm:px-3.5 py-2.5 shadow-sm space-y-2">
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-800">🔥 Tu meta de hoy:</span>
+          <button type="button" id="nv-toggle-btn"
+            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold border transition cursor-pointer shrink-0 ${
+              nvState.enabled
+                ? 'bg-emerald-600 text-white border-emerald-600'
+                : 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200'
+            }">
+            <span class="w-2 h-2 rounded-full ${nvState.enabled ? 'bg-amber-300' : 'bg-slate-400'}"></span>
+            <span>Nutri-Visor: ${nvState.enabled ? 'ON' : 'OFF'}</span>
+          </button>
         </div>
-        <button type="button" id="nv-toggle-btn"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold border transition cursor-pointer shrink-0 ${
-            nvState.enabled
-              ? 'bg-emerald-600 text-white border-emerald-600'
-              : 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200'
-          }">
-          <span class="w-2 h-2 rounded-full ${nvState.enabled ? 'bg-amber-300' : 'bg-slate-400'}"></span>
-          <span>Nutri-Visor: ${nvState.enabled ? 'ON' : 'OFF'}</span>
-        </button>
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 ${nvState.enabled ? '' : 'opacity-45 pointer-events-none'}">
+          ${GOALS.map((g) => {
+            const active = g.id === nvState.goalId;
+            return `
+              <button type="button" data-nv-goal="${g.id}"
+                class="w-full sm:w-auto px-2 sm:px-2.5 py-1.5 rounded-full text-[11.5px] sm:text-xs font-bold border transition cursor-pointer whitespace-nowrap text-center ${
+                  active
+                    ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm'
+                    : 'bg-emerald-50 text-emerald-900 border-emerald-200 hover:bg-emerald-100'
+                }">
+                ${g.icon} ${g.label}${g.kcal ? ` · ${g.kcal}` : ''}
+              </button>
+            `;
+          }).join('')}
+        </div>
       </div>
     `;
 
